@@ -4,7 +4,7 @@ import { TodoList } from '../../widgets/todo-list/TodoList';
 import { AddTodoForm } from '../../features/add-todo/ui/AddTodoForm';
 import { LogoutButton } from '../../features/logout/ui/LogoutButton';
 import { TodoState } from '../../entities/todo/ui/TodoState';
-import { TodoFilters } from '../../features/filter-todo/model/useFilterTodo';
+import { TodoFilters } from '../../features/filter-todo/ui/TodoFilter';
 
 export const TodosPage = () => {
     return (

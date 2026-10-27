@@ -1,1 +1,1 @@
-export {useFilterTasks} from './model/useFilterTodo'
+export {useFilterTasks} from './ui/TodoFilter'
