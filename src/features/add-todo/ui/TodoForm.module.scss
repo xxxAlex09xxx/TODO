@@ -1,0 +1,16 @@
+// app/components/TodoForm/TodoForm.module.scss
+.addButton {
+    padding: 12px 24px;
+    background: #4a90e2;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.15s;
+
+    &:hover {
+        background: #3a7bc8;
+    }
+}

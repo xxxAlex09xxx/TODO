@@ -1,0 +1,23 @@
+// src/features/logout/ui/LogoutButton.module.scss
+@use '../../../style/variables' as *; // 👈 Проверь путь до папки style (из ui до src - 3 уровня вверх)
+
+.submitButton {
+    padding: 0.75rem;
+    font-size: 1rem;
+    width: 140px;
+    color: $color-bg;
+    background: $prim;
+    border: none;
+    border-radius: 0.625rem;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+
+    &:hover:not(:disabled) {
+        background: $primary;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}

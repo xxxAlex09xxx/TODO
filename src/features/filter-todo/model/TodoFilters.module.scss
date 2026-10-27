@@ -1,0 +1,21 @@
+@use '../../../style/variables' as *; 
+.filters {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.filters button {
+    padding: 6px 12px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    background: none;
+    cursor: pointer;
+    font-size: 1rem;
+    color: $color-bg;
+}
+
+.active {
+    border-color: currentColor;
+    font-weight: 600;
+}

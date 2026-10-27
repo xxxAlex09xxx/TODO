@@ -1,0 +1,112 @@
+// app/components/TodoItem/TodoItem.module.scss
+@use '../../../style/variables' as *;
+
+.todoItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border: 1.5px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+    &:nth-child(odd) {
+        background: #e9e5fc;
+    }
+
+    &:nth-child(even) {
+        background: #ffffff;
+    }
+
+    &:hover {
+        background: #eef1ff;
+        border-color: #4a90e2;
+        box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.12);
+    }
+
+    /* 👇 ССЫЛКА = левая часть строки (чекбокс + текст) */
+    .itemLink {
+        display: flex;          // 👈 чтобы чекбокс и текст были в ряд
+        align-items: center;
+        gap: 12px;
+        flex: 1;                // 👈 растягиваем на всё место до кнопки удаления
+        min-width: 0;           // 👈 позволяет тексту сжиматься и переноситься
+        color: inherit;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    span {
+        flex: 1;
+        font-size: 1rem;
+        color: #222;
+        word-break: break-word;
+
+        &.completed {
+            text-decoration: line-through;
+            color: #aaa;
+        }
+    }
+
+    /* 👇 если свайп-кнопка есть — убираем внутренние отступы */
+    &:has([class*="swipe"]) {
+        padding: 0;
+    }
+}
+
+/* 👇 Круглый чекбокс — без изменений */
+.todoCheckbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    margin: 0;
+    padding: 0;
+    border: 1.5px solid #e6e8f0;
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.15s, background 0.15s;
+
+    &:hover:not(:disabled):not(:checked) {
+        border-color: #a25ddc;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 45%;
+        left: 50%;
+        width: 5px;
+        height: 9px;
+        border: solid #fff;
+        border-width: 0 2px 2px 0;
+        transform: translate(-50%, -55%) rotate(45deg) scale(0);
+        transition: transform 0.15s;
+    }
+
+    &:checked {
+        border-color: transparent;
+        background: linear-gradient(135deg, #4a90e2 0%, #a25ddc 100%);
+
+        &::after {
+            transform: translate(-50%, -55%) rotate(45deg) scale(1);
+        }
+    }
+
+    &:active:not(:disabled) {
+        transform: scale(0.92);
+    }
+
+    &:focus-visible {
+        outline: 2px solid #4a90e2;
+        outline-offset: 2px;
+    }
+}

@@ -1,0 +1,127 @@
+@use '../../style//variables.scss' as *;
+/* ============================
+   Wrapper — вертикальный flex,
+   ограничен высотой экрана
+   ============================ */
+.wrapper {
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+/* ============================
+   HERO — верхний ряд с фоном
+   ============================ */
+.hero {
+    width: 100%;
+    min-height: 250px;
+    flex-shrink: 0;
+    display: flex;            /* ← добавить */
+    align-items: stretch;
+
+    background-image: url('../../assets/Bitmap.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.heroGrid {
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: stretch;  
+    width: 100%;
+    
+}
+
+/* центральная колонка hero: логотип + форма */
+.containerHed {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 34px;
+    padding: 12px 6px;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    letter-spacing: 0.3em;
+    text-align: center;
+    color: $color-bg;
+}
+
+/* правая колонка hero: кнопка «Выйти» */
+.logoutWrapper {
+    grid-column: 3;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;  
+    justify-content: space-between; 
+    padding: 16px;
+}
+
+/* ============================
+   СПИСОК ЗАДАЧ — grid 1fr 2fr 1fr,
+   скроллится только он
+   ============================ */
+.container {
+    width: 100%;
+    flex: 1;              /* занять остаток высоты */
+    min-height: 0;        /* разрешить сжатие меньше контента */
+    overflow-y: auto;     /* скролл только здесь */
+
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    align-items: start;
+}
+
+/* центральная колонка списка */
+.todoColumn {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 24px 16px;
+}
+
+.todoList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    
+}
+
+.emptyMessage {
+    text-align: center;
+    font-size: 1.1rem;
+    opacity: 0.7;
+    margin: 0;
+}
+.submitButton {
+     // 8px — небольшой доп. отступ от последнего поля
+  padding: 0.75rem;        // 12px
+  font-size: 01rem;         // 16px
+ width: 140px; 
+ 
+  color: $color-bg;
+  background: $prim;
+  border: none;
+  border-radius: 0.625rem; // 10px — как у инпутов, для единообразия
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+
+   &:hover:not(:disabled) {
+    background: $primary;   // тот же $primary, но темнее
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}

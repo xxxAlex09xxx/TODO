@@ -1,0 +1,1 @@
+export { useDeletTask } from './model/useDeleteTask';

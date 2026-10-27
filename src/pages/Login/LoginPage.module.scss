@@ -1,0 +1,142 @@
+@use '../../style/variables.scss' as *;
+
+
+
+.page {
+    min-height: 100vh;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(138deg, $bg-gradient-start 0%, $bg-gradient-end 100%);
+}
+.card {
+    width: 100%;
+    max-width: 26.25rem; // 420px
+    padding: 2rem;  
+      background: #ffffff;
+      border-radius: 1.25rem; // 20px
+      box-shadow: 0 1.25rem 2.5rem rgba(0, 0, 0, 0.15); // 0 20px 40px
+}
+
+.title {
+    margin: 0 0 0.5rem;  
+    font-size: 1.75rem; 
+    text-align: center;
+    color: #c36fd3;
+}
+.subtitle {
+  margin: 0 0 1.75rem;     // 0 0 28px
+  font-size: 0.875rem;     // 14px
+  color: #6b7280;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; // 16px между полями
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem; // 6px между лейблом и инпутом
+}
+
+.label {
+  font-size: 1.2rem; // 13px
+  font-weight: 600;
+  color: $primary;
+}
+
+.input {
+  width: 100%;
+  padding: 0.75rem 0.875rem; // 12px 14px
+  font-size: 0.9375rem;      // 15px
+  color: #1f2937;
+  background: #f9fafb;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 0.625rem;   // 10px
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+
+  &::placeholder {
+    color: #9ca3af;
+  }
+
+  &:focus {
+    background: #ffffff;
+    border-color: $primary;
+
+  }
+}
+// --- Кнопка отправки ---
+.submitButton {
+  margin-top: 0.5rem;      // 8px — небольшой доп. отступ от последнего поля
+  padding: 0.75rem;        // 12px
+  font-size: 1rem;         // 16px
+  font-weight: 600;
+  color: #ffffff;
+  background: $prim;
+  border: none;
+  border-radius: 0.625rem; // 10px — как у инпутов, для единообразия
+  cursor: pointer;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+
+   &:hover:not(:disabled) {
+    background: $primary;   // тот же $primary, но темнее
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+}
+  // --- Блок ошибки ---
+.error {
+  padding: 0.625rem 0.875rem;   // 10px 14px
+  font-size: 0.875rem;          // 14px
+  color: #ce0b0b;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 0.625rem;      // 10px — как у инпутов и кнопки
+  text-align: center;
+}
+
+// --- Кнопка переключения login/register ---
+.switchButton {
+  display: block;
+  width: 100%;
+  margin-top: 1.25rem;      // 20px отступ от формы
+  padding: 0.5rem;          // 8px
+  font-size: 0.875rem;      // 14px
+  color: $primary;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  transition: color 0.2s;
+
+  &:hover {
+    color: $primary;
+    text-decoration: underline;
+  }
+}
+// Контейнер для ссылки "Забыли пароль"
+.forgotPasswordWrapper {
+  text-align: center;
+  margin-top: 10px;
+}
+
+// Сама ссылка
+.forgotPasswordLink {
+  font-size: 14px;
+  color: #676ae9;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline; // Добавим эффект при наведении, чтобы было красиво
+  }
+}
