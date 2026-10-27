@@ -29,7 +29,7 @@ export const TodoList = () => {
 
     return (
         <ul>
-            {visibleTodos.map(todo => (
+            {visibleTodos.slice().reverse().map((todo) => (
                 <TodoItem
                     key={todo.id}
                     todo={todo}
