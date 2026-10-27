@@ -2,7 +2,7 @@
 import { useAppDispatch, useAppSelector } from '../../../app/store/hooks';
 import { setFilter } from '../../../entities/todo/model/slice';
 import type { TaskFilter } from '../../../entities/todo/model/types';
-import style from './TodoFilters.module.scss'; // 👈 Скопируй стили из старого проекта
+import style from './TodoFilter.module.scss'; // 👈 Скопируй стили из старого проекта
 
 export const TodoFilters = () => {
     const dispatch = useAppDispatch();
