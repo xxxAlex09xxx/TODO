@@ -1,12 +1,16 @@
 // src/widgets/todo-list/TodoList.tsx
 import { useEffect,useMemo } from 'react';
 import { useAppSelector, useAppDispatch } from '../../app/store/hooks';
-import { loadTodos, toggleTodo, removeTodo } from '../../entities/todo/model/slice';
+import { loadTodos } from '../../entities/todo/model/slice';
 import { TodoItem } from '../../entities/todo/ui/TodoItem'; // 👈 Импортируем карточку
+import { useToggleTodo } from '../../features/toggle-todo/model/useToggleTodo';
+import { useDeleteTodo } from '../../features/delete-todo/model/useDeleteTodo';
 
 export const TodoList = () => {
     const dispatch = useAppDispatch();
     const { todos, loading, error, filter } = useAppSelector((state) => state.todos);
+     const toggle = useToggleTodo();
+    const remove = useDeleteTodo();
 
     useEffect(() => {
         dispatch(loadTodos());
@@ -33,13 +37,8 @@ export const TodoList = () => {
                 <TodoItem
                     key={todo.id}
                     todo={todo}
-                    onToggle={(id) => {
-                        const task = todos.find(t => t.id === id);
-                        if (task) {
-                            dispatch(toggleTodo({ id, completed: !task.completed }));
-                        }
-                    }}
-                    onDelete={(id) => dispatch(removeTodo(id))}
+                    onToggle={() => toggle(todo.id, !todo.completed)}
+                    onDelete={() => remove(todo.id)}
                 />
             ))}
         </ul>

@@ -1,1 +1,1 @@
-export { useDeletTask } from './model/useDeleteTask';
+export { useDeleteTodo } from './model/useDeleteTodo';

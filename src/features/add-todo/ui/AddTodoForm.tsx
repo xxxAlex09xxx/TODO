@@ -1,8 +1,4 @@
-import { useState } from 'react';
-import { useAppDispatch } from '../../../app/store/hooks';
-// ВАЖНО: проверь правильность пути к экшену addTodo. 
-// Скорее всего, он лежит в entities/todo/model/slice
-import { addTodo } from '../../../entities/todo/model/slice'; 
+import { useAddTodo } from '../model/useAddTodo';
 import style from './TodoForm.module.scss';
 
 interface AddTodoFormProps {
@@ -10,29 +6,23 @@ interface AddTodoFormProps {
 }
 
 export const AddTodoForm = ({ onClose }: AddTodoFormProps) => {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const dispatch = useAppDispatch(); // Инициализируем dispatch
+    const addTodo = useAddTodo(); 
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
-        const trimmedTitle = title.trim();
-        const trimmedDesc = description.trim();
+        // Забираем данные прямо из формы в момент отправки
+        const formData = new FormData(e.currentTarget);
+        const title = (formData.get('title') as string || '').trim();
+        const description = (formData.get('description') as string || '').trim();
         
-        if (!trimmedTitle || !trimmedDesc) return;
+        if (!title || !description) return;
 
-        // Отправляем задачу на сервер через Redux
-        dispatch(addTodo({ 
-            title: trimmedTitle, 
-            description: trimmedDesc 
-        }));
         
-        // Очищаем форму
-        setTitle('');
-        setDescription('');
+        addTodo(title, description);
         
-        // Закрываем модалку
+        // Очищаем форму и закрываем модалку
+        e.currentTarget.reset(); 
         onClose(); 
     };
 
@@ -43,10 +33,10 @@ export const AddTodoForm = ({ onClose }: AddTodoFormProps) => {
                 <input
                     className={style.input}
                     type="text"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    name="title" 
                     placeholder="Введите тему задачи"
                     autoFocus
+                    required
                 />
             </label>
 
@@ -54,10 +44,10 @@ export const AddTodoForm = ({ onClose }: AddTodoFormProps) => {
                 Описание
                 <textarea
                     className={style.textarea}
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
+                    name="description" 
                     placeholder="Введите описание задачи"
                     rows={4}
+                    required
                 />
             </label>
 
@@ -72,7 +62,6 @@ export const AddTodoForm = ({ onClose }: AddTodoFormProps) => {
                 <button 
                     type="submit" 
                     className={style.submitButton}
-                    disabled={!title.trim() || !description.trim()}
                 >
                     Добавить
                 </button>
