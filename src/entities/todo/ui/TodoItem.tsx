@@ -20,8 +20,8 @@ export const TodoItem = ({  todo, onToggle, onDelete }: TodoItemProps) => {
                     checked={completed}
                     onChange={() => onToggle(id)}
                     onClick={(e) => {
-                        e.preventDefault();  // 👈 не переходим по ссылке
-                        e.stopPropagation(); // 👈 не даём клику всплыть
+                        e.preventDefault();  
+                        e.stopPropagation(); 
                     }}
                     className={style.todoCheckbox}
                     aria-label={completed ? 'Отметить как активную' : 'Отметить как выполненную'}

@@ -1,24 +1,28 @@
-// app/pages/ForgotPasswordPage/ForgotPasswordPage.tsx
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { forgotPassword } from '../../shared/api/auth';
-import style from '../Login/LoginPage.module.scss'; // 👈 Используем стили логина
+import { forgotPassword } from '@/shared/api/auth';
+import style from '../Login/LoginPage.module.scss';
 
 export const ForgotPasswordPage = () => {
-    const [email, setEmail] = useState('');
+    // Оставляем только стейты для статуса запроса
     const [message, setMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setError(null);
         setMessage(null);
         setLoading(true);
 
+        // Забираем email через FormData (как в AddTodoForm)
+        const formData = new FormData(e.currentTarget);
+        const email = (formData.get('email') as string || '').trim();
+
         try {
             await forgotPassword(email);
             setMessage('Если email зарегистрирован, письмо отправлено. Проверьте почту.');
+            e.currentTarget.reset(); // Очищаем инпут
         } catch (err) {
             setError(err instanceof Error ? err.message : 'Что-то пошло не так');
         } finally {
@@ -39,9 +43,8 @@ export const ForgotPasswordPage = () => {
                         </label>
                         <input
                             id="email"
+                            name="email" // 👈 Добавили name
                             type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
                             required
                             className={style.input}
                             placeholder="Ваш email"

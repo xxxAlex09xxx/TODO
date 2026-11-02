@@ -1,7 +1,7 @@
 // app/pages/ResetPasswordPage/ResetPasswordPage.tsx
 import { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { resetPassword } from '../../shared/api/auth';
+import { resetPassword } from '@/shared/api/auth';
 import { ResetPasswordForm } from './ResetPasswordForm';
 import style from '../Login/LoginPage.module.scss';
 

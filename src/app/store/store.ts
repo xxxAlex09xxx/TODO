@@ -1,10 +1,12 @@
 // src/app/store/store.ts
 import { configureStore } from '@reduxjs/toolkit';
-import todoReducer from '../../entities/todo/model/slice'; // 👈 Проверь путь!
+import todoReducer from '@/entities/todo/model/slice';
+import themeReducer from '@/entities/theme/model/slice';
 
 export const store = configureStore({
     reducer: {
         todos: todoReducer,
+        theme: themeReducer,
     },
 });
 

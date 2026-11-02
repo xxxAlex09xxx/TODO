@@ -5,14 +5,16 @@
     align-items: flex-start;
     padding: 40px 20px;
 }
-.head{
-     display: flex;
-     flex-direction: row;
-     justify-content: space-between;
-    
-     
-     
+
+.head {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+
+
 }
+
 .meta {
     display: flex;
     gap: 12px;
@@ -20,7 +22,7 @@
     font-size: 13px;
     color: #666;
 
-     
+
 }
 
 .card {
@@ -37,28 +39,33 @@
 
 .backButton {
     align-self: flex-start;
-    
+
     color: #676ae9;
     cursor: pointer;
     font-size: 14px;
-     border: 1px solid #cdc4f5;
-     padding: 12px;
+    border: 1px solid #cdc4f5;
+    padding: 12px;
     border-radius: 12px;
-    
+
 }
 
 .title {
-    
+
     text-align: center;
     font-size: 28px;
     margin: 0;
-     word-break: break-word;
+    word-break: break-word;
 }
 
 
 
-.done { color: #2e7d32; }
-.active { color: #ef6c00; }
+.done {
+    color: #2e7d32;
+}
+
+.active {
+    color: #ef6c00;
+}
 
 .description {
     font-size: 16px;
@@ -76,14 +83,31 @@
     padding: 10px 16px;
     cursor: pointer;
 }
+
 .description {
     margin: 0;
     padding: 16px;
     border-radius: 12px;
-      border: 1px solid #cdc4f5;
+    border: 1px solid #cdc4f5;
     font-size: 1rem;
     line-height: 1.6;
     color: #333;
     white-space: pre-wrap; // сохраняет переносы строк, если они есть в описании
     word-break: break-word;
 }
+
+.statusButton {
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover {
+        opacity: 0.7; // Легкий эффект при наведении
+    }
+}
+
+// Твои старые классы (done, active) остаются, они задают цвет

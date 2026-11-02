@@ -1,28 +1,42 @@
-@use './variables' as *;   // ← подключаем переменные глобально
+// src/style/global.scss
+@use './variables' as *;
 
-*,
-*::before,
-*::after {
+*, *::before, *::after {
     box-sizing: border-box;
-}
-
-html,
-body,
-#root {
     margin: 0;
     padding: 0;
+}
+
+html, body, #root {
     width: 100%;
     height: 100%;
     font-family: $font-family-base;
-    color: $color-text;
-    background: $color-bg;
-}
-h1, h2, h3, p, ul, li {
-    margin: 0;
-    padding: 0;
 }
 
 body {
     overflow: hidden;
-    font-family: system-ui, sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background-color 0.4s ease-in-out, color 0.4s ease-in-out;
+}
+
+/* 👇 СВЕТЛАЯ ТЕМА (глобальные переменные) */
+:root, .theme-light {
+    --bg-color: #f4f4f9;
+    --text-color: #333333;
+    --card-bg: #ffffff;
+    --card-border: #e0e0e0;
+}
+
+/* 👇 ТЕМНАЯ ТЕМА (переопределяем переменные) */
+[data-theme="dark"], .theme-dark {
+    --bg-color: #121212;
+    --text-color: #f0f0f0;
+    --card-bg: #383535;
+    --card-border: #333333;
+}
+
+h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
 }

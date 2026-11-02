@@ -1,7 +1,8 @@
-@use '../../style//variables.scss' as *;
+// src/pages/TodosPage/TodosPage.module.scss
+@use '@/style/variables' as *;
+
 /* ============================
-   Wrapper — вертикальный flex,
-   ограничен высотой экрана
+   Wrapper — вертикальный flex
    ============================ */
 .wrapper {
     width: 100%;
@@ -9,83 +10,113 @@
     display: flex;
     flex-direction: column;
     margin: 0;
+    background-color: var(--bg-color, #f4f4f9);
+    transition: background-color 0.4s ease-in-out;
 }
 
 /* ============================
-   HERO — верхний ряд с фоном
+   HERO — верхний ряд с картинками
    ============================ */
 .hero {
     width: 100%;
     min-height: 250px;
     flex-shrink: 0;
-    display: flex;            /* ← добавить */
+    display: flex;
     align-items: stretch;
-
-    background-image: url('../../assets/Bitmap.png');
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
+    position: relative;
+    background-color: #1a1a1a; 
 }
 
+/* Общие стили для слоев с картинками */
+.heroBg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    transition: opacity 0.4s ease-in-out;
+}
+
+/* Светлая картинка */
+.lightBg {
+    background-image: url('../../assets/Bitmap.png');
+    opacity: 1;
+    z-index: 1;
+}
+
+/* Темная картинка */
+.darkBg {
+    background-image: url('../../assets/Bitmap.jpg'); 
+    opacity: 0;
+    z-index: 2;
+}
+
+/* Переключение прозрачности при смене темы */
+:global(.theme-dark) .lightBg {
+    opacity: 0;
+}
+
+:global(.theme-dark) .darkBg {
+    opacity: 1;
+}
+
+/* Контент поверх картинок */
 .heroGrid {
+    position: relative;
+    z-index: 10;
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
-    align-items: stretch;  
+    align-items: stretch;
     width: 100%;
-    
 }
 
-/* центральная колонка hero: логотип + форма */
+/* Центральная колонка hero */
 .containerHed {
     grid-column: 2;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 24px;
-    padding: 12px 6px;
+    gap: $space-lg; /* 👈 Используем переменную */
+    padding: $space-sm $space-xs;
 }
 
 .header h1 {
     margin: 0;
-    font-size: 2.5rem;
+    font-size: $font-size-xl; /* 👈 Используем переменную */
     letter-spacing: 0.3em;
     text-align: center;
-    color: $color-bg;
+    color: #ffffff;
 }
 
-/* правая колонка hero: кнопка «Выйти» */
+/* Правая колонка hero */
 .logoutWrapper {
     grid-column: 3;
     display: flex;
     flex-direction: column;
-    align-items: flex-end;  
-    justify-content: space-between; 
-    padding: 16px;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: $space-md;
 }
 
 /* ============================
-   СПИСОК ЗАДАЧ — grid 1fr 2fr 1fr,
-   скроллится только он
+   СПИСОК ЗАДАЧ
    ============================ */
 .container {
     width: 100%;
-    flex: 1;              /* занять остаток высоты */
-    min-height: 0;        /* разрешить сжатие меньше контента */
-    overflow-y: auto;     /* скролл только здесь */
-
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
     align-items: start;
 }
 
-/* центральная колонка списка */
 .todoColumn {
     grid-column: 2;
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding: 24px 16px;
+    gap: $space-md; /* 👈 */
+    padding: $space-lg $space-md;
 }
 
 .todoList {
@@ -94,53 +125,60 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    
+    gap: $space-sm;
 }
 
 .emptyMessage {
     text-align: center;
-    font-size: 1.1rem;
+    font-size: $font-size-lg;
     opacity: 0.7;
     margin: 0;
+    color: var(--text-color, #333);
 }
+
+/* ============================
+   КНОПКИ
+   ============================ */
+
+/* Кнопка "Выйти" */
 .submitButton {
-     // 8px — небольшой доп. отступ от последнего поля
-  padding: 0.75rem;        // 12px
-  font-size: 01rem;         // 16px
- width: 140px; 
- 
-  color: $color-bg;
-  background: $prim;
-  border: none;
-  border-radius: 0.625rem; // 10px — как у инпутов, для единообразия
-  cursor: pointer;
-  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
-
-   &:hover:not(:disabled) {
-    background: $primary;   // тот же $primary, но темнее
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-}
-.addButton {
-    padding: 12px 24px;
-    background: #4a90e2;
-    color: #fff;
+    padding: 0.75rem;
+    font-size: $font-size-base;
+    width: 140px;
+    color: #ffffff;
+    background: $color-primary; /* 👈 Брендовый цвет */
     border: none;
-    border-radius: 8px;
-    font-size: 15px;
+    border-radius: $radius-md; /* 👈 */
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
+
+    &:hover:not(:disabled) {
+        background: $color-primary-hover; /* 👈 Темнее */
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+}
+
+/* Кнопка "Добавить задачу" */
+.addButton {
+    padding: $space-sm $space-lg;
+    background: $color-primary; /* 👈 Брендовый цвет */
+    color: #ffffff;
+    border: none;
+    border-radius: $radius-md;
+    font-size: $font-size-base;
     font-weight: 500;
     cursor: pointer;
     transition: background 0.15s, transform 0.1s;
 
     &:hover {
-        background: #3a7bc8;
+        background: $color-primary-hover; /* 👈 */
     }
 
     &:active {
-        transform: scale(0.98); // Легкий эффект нажатия
+        transform: scale(0.98);
     }
 }

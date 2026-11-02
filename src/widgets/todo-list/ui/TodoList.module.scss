@@ -1,0 +1,34 @@
+// src/widgets/todo-list/ui/TodoList.module.scss
+@use '@/style/variables' as *;
+
+/* 👇 Контейнер для всего списка (белая карточка) */
+.listContainer {
+    background-color: var(--card-bg, #ffffff); /* Общий фон */
+    border-radius: $radius-md; /* Скругление углов */
+    box-shadow: $shadow-md;    /* Тень */
+    overflow: hidden;          /* Чтобы содержимое не вылезало за скругленные углы */
+    transition: background-color 0.4s ease-in-out;
+}
+
+/* 👇 Сам список (убираем стандартные отступы) */
+.todoList {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 👇 Сообщение, если задач нет */
+.emptyMessage {
+    text-align: center;
+    font-size: 1.2rem;
+    color: var(--text-color, #666);
+    margin-top: 40px;
+    padding: 20px;
+    background-color: var(--card-bg, #f9f9f9);
+    border-radius: 12px;
+    border: 1px dashed var(--card-border, #ccc);
+    opacity: 0.8;
+    font-style: italic;
+}

@@ -1,45 +1,77 @@
 // src/style/_variables.scss
 
-// Цвета
-$color-primary: #3b82f6;
-$color-primary-hover: #2563eb;
-$color-danger: #ef4444;
-$color-success: #22c55e;
-$color-text: #1f2937;
-$color-text-muted: #6b7280;
-$color-bg: #ffffff;
-$color-bg-secondary: #f9fafb;
+/* ============================
+   ЦВЕТА
+   ============================ */
+// Брендовые (основные) цвета
+$color-primary: #676ae9;          // Основной фиолетовый (кнопки, акценты)
+$color-primary-hover: #7376d1;    // Фиолетовый при наведении
+$color-primary-light: #9d78e2b0;  // Полупрозрачный
+
+// 👇 ДОБАВИЛИ: Градиент и цвет рамки для чекбокса
+$gradient-checkbox: linear-gradient(135deg, #4a90e2 0%, #a25ddc 100%); 
+$color-checkbox-border: #a25ddc;
+
+// Цвета состояний
+$color-danger: #ef4444;           // Красный (удаление, ошибки)
+$color-success: #22c55e;          // Зеленый (успех, выполнено)
+
+// Текстовые цвета
+$color-text: #1f2937;             // Основной текст
+$color-text-muted: #6b7280;       // Приглушенный (серый) текст
+$color-text-completed: #888888;   // 👈 ДОБАВИЛИ: Цвет для выполненных задач
+
+// Фоны
+$color-bg: #ffffff;               // Белый фон
+$color-bg-secondary: #f9fafb;     // Светло-серый (для карточек)
+
+// Границы
 $color-border: #e5e7eb;
 
-$primary: #676ae9;
+// Градиенты для фонов страниц (если используются)
 $bg-gradient-start: #ffffff;
 $bg-gradient-end: #898be9;
-$prim:#9d78e2b0;
 
-// Отступы
+
+/* ============================
+   ОТСТУПЫ (Spacing)
+   ============================ */
 $space-xs: 4px;
 $space-sm: 8px;
 $space-md: 16px;
 $space-lg: 24px;
 $space-xl: 32px;
 
-// Радиусы
+
+/* ============================
+   РАДИУСЫ (Border Radius)
+   ============================ */
 $radius-sm: 4px;
 $radius-md: 8px;
 $radius-lg: 16px;
 
-// Шрифты
-$font-family-base: system-ui, sans-serif;
-$font-size-sm: 0.875rem;
-$font-size-base: 1rem;
-$font-size-lg: 1.25rem;
-$font-size-xl: 2rem;
 
-// Тени
+/* ============================
+   ШРИФТЫ (Typography)
+   ============================ */
+$font-family-base: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+$font-size-sm: 0.875rem;  // 14px
+$font-size-base: 1rem;    // 16px
+$font-size-lg: 1.25rem;   // 20px
+$font-size-xl: 2rem;      // 32px
+
+
+/* ============================
+   ТЕНИ (Shadows)
+   ============================ */
 $shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
 $shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
 
-// Брейкпоинты
+
+/* ============================
+   БРЕЙКПОИНТЫ (Breakpoints)
+   ============================ */
 $bp-mobile: 480px;
 $bp-tablet: 768px;
 $bp-desktop: 1024px;

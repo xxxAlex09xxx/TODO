@@ -6,9 +6,9 @@ import {
     useEffect,
    type ReactNode,
 } from 'react';
-import { refresh } from '../../shared/api/auth-refresh';
-import { getMe, logout as logoutApi,type User } from '../../shared/api/auth';
-import { setAccessToken } from '../../shared/api/auth-token';
+import { refresh } from '@/shared/api/auth-refresh';
+import { getMe, logout as logoutApi,type User } from '@/shared/api/auth';
+import { setAccessToken } from '@/shared/api/auth-token';
 
 interface AuthContextValue {
     user: User | null;

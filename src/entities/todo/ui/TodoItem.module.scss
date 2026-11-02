@@ -1,41 +1,51 @@
-// app/components/TodoItem/TodoItem.module.scss
-@use '../../../style/variables' as *;
+// src/entities/todo/ui/TodoItem.module.scss
+@use '@/style/variables' as *;
 
 .todoItem {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px;
-    border: 1.5px solid transparent;
-    border-radius: 8px;
+    gap: $space-md;
+    padding: $space-md;
+    
+    /* 👇 Фон прозрачный (он у контейнера) */
+    background-color: transparent;
+    
+    /* 👇 Разделитель снизу */
+    border-bottom: 1px solid var(--card-border, #e0e0e0);
+    
     cursor: pointer;
+    transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 
-    transition:
-        background 0.2s ease,
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
-
-    &:nth-child(odd) {
-        background: #e9e5fc;
+    /* Для последнего элемента убираем разделитель */
+    &:last-child {
+        border-bottom: none;
     }
 
-    &:nth-child(even) {
-        background: #ffffff;
-    }
-
+    /* 👇 Подсветка при наведении */
     &:hover {
-        background: #eef1ff;
-        border-color: #4a90e2;
-        box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.12);
+        background-color: var(--card-bg, #f9f9f9);
+        
+        /* Текст становится брендовым (фиолетовым) */
+        span {
+            color: $color-primary;
+            
+            /* Но если задача выполнена, оставляем ее серой */
+            &.completed {
+                color: $color-text-completed; 
+            }
+        }
+
+        /* Слева появляется фиолетовая полоска */
+        box-shadow: inset 3px 0 0 $color-primary; 
     }
 
     /* 👇 ССЫЛКА = левая часть строки (чекбокс + текст) */
     .itemLink {
-        display: flex;          // 👈 чтобы чекбокс и текст были в ряд
+        display: flex;
         align-items: center;
-        gap: 12px;
-        flex: 1;                // 👈 растягиваем на всё место до кнопки удаления
-        min-width: 0;           // 👈 позволяет тексту сжиматься и переноситься
+        gap: $space-md;
+        flex: 1;
+        min-width: 0;
         color: inherit;
         text-decoration: none;
         cursor: pointer;
@@ -43,13 +53,14 @@
 
     span {
         flex: 1;
-        font-size: 1rem;
-        color: #222;
+        font-size: $font-size-base;
+        color: var(--text-color, #222);
         word-break: break-word;
+        transition: color 0.2s ease-in-out; /* 👈 Плавная смена цвета текста */
 
         &.completed {
             text-decoration: line-through;
-            color: #aaa;
+            color: $color-text-completed;
         }
     }
 
@@ -59,7 +70,7 @@
     }
 }
 
-/* 👇 Круглый чекбокс — без изменений */
+/* 👇 Круглый чекбокс */
 .todoCheckbox {
     appearance: none;
     -webkit-appearance: none;
@@ -68,15 +79,15 @@
     flex-shrink: 0;
     margin: 0;
     padding: 0;
-    border: 1.5px solid #e6e8f0;
+    border: 1.5px solid var(--text-color, #e6e8f0);
     border-radius: 50%;
-    background: #fff;
+    background: transparent;
     cursor: pointer;
     position: relative;
     transition: border-color 0.15s, background 0.15s;
 
     &:hover:not(:disabled):not(:checked) {
-        border-color: #a25ddc;
+        border-color: $color-checkbox-border;
     }
 
     &::after {
@@ -94,7 +105,7 @@
 
     &:checked {
         border-color: transparent;
-        background: linear-gradient(135deg, #4a90e2 0%, #a25ddc 100%);
+        background: $gradient-checkbox;
 
         &::after {
             transform: translate(-50%, -55%) rotate(45deg) scale(1);
@@ -106,7 +117,7 @@
     }
 
     &:focus-visible {
-        outline: 2px solid #4a90e2;
+        outline: 2px solid $color-primary;
         outline-offset: 2px;
     }
 }

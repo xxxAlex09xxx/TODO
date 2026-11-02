@@ -1,8 +1,8 @@
 // app/pages/Login/LoginPage.tsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login, register } from '../../shared/api/auth';
-import { useAuth } from '../../app/providers/AuthProvider';
+import { login, register } from '@/shared/api/auth';
+import { useAuth } from '@/app/providers/AuthProvider';
 import { LoginForm } from './LoginForm'; // 👈 Импортируем нашу форму
 
 export const LoginPage = () => {

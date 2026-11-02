@@ -47,7 +47,7 @@
 .label {
   font-size: 1.2rem; // 13px
   font-weight: 600;
-  color: $primary;
+  color: $color-primary-light;
 }
 
 .input {
@@ -67,7 +67,7 @@
 
   &:focus {
     background: #ffffff;
-    border-color: $primary;
+    border-color: $color-primary-light;
 
   }
 }
@@ -78,14 +78,14 @@
   font-size: 1rem;         // 16px
   font-weight: 600;
   color: #ffffff;
-  background: $prim;
+  background: $color-primary-light;
   border: none;
   border-radius: 0.625rem; // 10px — как у инпутов, для единообразия
   cursor: pointer;
   transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
 
    &:hover:not(:disabled) {
-    background: $primary;   // тот же $primary, но темнее
+    background: $color-primary-hover;   // тот же $primary, но темнее
   }
 
   &:disabled {
@@ -112,7 +112,7 @@
   margin-top: 1.25rem;      // 20px отступ от формы
   padding: 0.5rem;          // 8px
   font-size: 0.875rem;      // 14px
-  color: $primary;
+  color: $color-primary-light;
   background: none;
   border: none;
   cursor: pointer;
@@ -120,7 +120,7 @@
   transition: color 0.2s;
 
   &:hover {
-    color: $primary;
+    color: $color-primary-light;
     text-decoration: underline;
   }
 }
