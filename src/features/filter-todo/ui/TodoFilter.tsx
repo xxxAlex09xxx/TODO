@@ -1,13 +1,13 @@
 // src/features/filter-todo/ui/TodoFilters.tsx
-import { useAppDispatch, useAppSelector } from '../../../app/store/hooks';
-import { setFilter } from '../../../entities/todo/model/slice';
-import type { TaskFilter } from '../../../entities/todo/model/types';
+import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
+import { setFilter } from '@/entities/filter/model/slice';
+import type { TaskFilter } from '@/entities/todo/model/types';
 import style from './TodoFilter.module.scss'; // 👈 Скопируй стили из старого проекта
 
 export const TodoFilters = () => {
     const dispatch = useAppDispatch();
     // Достаем текущий фильтр из Redux
-    const currentFilter = useAppSelector((state) => state.todos.filter);
+    const currentFilter = useAppSelector((state) => state.filter.filter);
 
     const filters: { value: TaskFilter; label: string }[] = [
         { value: 'all', label: 'Все' },

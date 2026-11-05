@@ -119,49 +119,6 @@
     padding: $space-lg $space-md;
 }
 
-.todoList {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: $space-sm;
-}
-
-.emptyMessage {
-    text-align: center;
-    font-size: $font-size-lg;
-    opacity: 0.7;
-    margin: 0;
-    color: var(--text-color, #333);
-}
-
-/* ============================
-   КНОПКИ
-   ============================ */
-
-/* Кнопка "Выйти" */
-.submitButton {
-    padding: 0.75rem;
-    font-size: $font-size-base;
-    width: 140px;
-    color: #ffffff;
-    background: $color-primary; /* 👈 Брендовый цвет */
-    border: none;
-    border-radius: $radius-md; /* 👈 */
-    cursor: pointer;
-    transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
-
-    &:hover:not(:disabled) {
-        background: $color-primary-hover; /* 👈 Темнее */
-    }
-
-    &:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-    }
-}
-
 /* Кнопка "Добавить задачу" */
 .addButton {
     padding: $space-sm $space-lg;

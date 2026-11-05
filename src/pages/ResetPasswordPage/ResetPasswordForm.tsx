@@ -1,7 +1,7 @@
 // app/pages/ResetPasswordPage/ResetPasswordForm.tsx
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import style from '../Login/LoginPage.module.scss';
+import style from './ResetPasswordPage.module.scss';
 
 interface ResetPasswordFormProps {
     onSubmit: (password: string) => void;

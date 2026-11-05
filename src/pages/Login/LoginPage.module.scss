@@ -1,6 +1,4 @@
-@use '../../style/variables.scss' as *;
-
-
+@use '@/style/variables.scss' as *;
 
 .page {
     min-height: 100vh;
@@ -133,7 +131,7 @@
 // Сама ссылка
 .forgotPasswordLink {
   font-size: 14px;
-  color: #676ae9;
+  color: $color-primary-light;
   text-decoration: none;
 
   &:hover {

@@ -1,5 +1,6 @@
 // src/entities/todo/api/todos.ts
-import { apiFetch } from '../../../shared/api/client';
+import { apiFetch } from '@/shared/api/client';
+import type { Todo } from '../model/types';
 
 const API_URL = 'http://localhost:5000/todos';
 
@@ -67,3 +68,15 @@ export const deleteTodoById = async (id: number): Promise<void> => {
         throw new Error(`Ошибка: ${response.status}`);
     }
 };
+// GET /todo → { todo: Todo }
+export const fetchTodoById = async (id: number): Promise<Todo>=>{
+    const response = await apiFetch(`${API_URL}/${id}`)
+    if(!response.ok){
+        if(response.status===404){
+            throw new Error ('Задача  не найдена')
+        }
+        throw new Error (`ошибка: ${response.status}`)
+    }
+    const data: {todo: TodoFromServer} = await response.json();
+    return formatTodo(data.todo);
+}

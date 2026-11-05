@@ -14,7 +14,7 @@ export const TodosPage = () => {
     return (
         <div className={style.wrapper}>
             <div className={style.hero}>
-                {/* 👇 ВОТ ОНИ, ДВА СЛОЯ ДЛЯ КАРТИНОК */}
+                {/* 👇 ДВА СЛОЯ ДЛЯ КАРТИНОК */}
                 <div className={`${style.heroBg} ${style.lightBg}`} />
                 <div className={`${style.heroBg} ${style.darkBg}`} />
 

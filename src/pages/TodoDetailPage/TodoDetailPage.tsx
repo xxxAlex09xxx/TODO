@@ -1,7 +1,6 @@
+// src/pages/TodoDetailPage/TodoDetailPage.tsx
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAppSelector, useAppDispatch } from '@/app/store/hooks';
-import { useDeleteTodo } from '@/features/delete-todo/model/useDeleteTodo';
-import { useToggleTodo } from '@/features/toggle-todo/model/useToggleTodo';
+import { useTodo } from '@/entities/todo/model/useTodo'; // 👈 Импорт нового хука
 import style from './TodoDetailPage.module.scss';
 
 export const TodoDetailPage = () => {
@@ -9,26 +8,21 @@ export const TodoDetailPage = () => {
     const todoId = Number(id);
     const navigate = useNavigate();
 
-    // Достаем задачу из Redux
-    const todos = useAppSelector((state) => state.todos.todos);
-    const todo = todos.find((t) => t.id === todoId);
-
-    const toggle = useToggleTodo();
-    const remove = useDeleteTodo();
+    // 👇 Используем новый хук
+    const { todo, isLoading, error, toggleTodo, deleteTodo } = useTodo(todoId);
 
     const handleDelete = () => {
-        if (!todo) return;
-        remove(todo.id);
-        navigate('/', { replace: true }); // Возвращаемся на главную
+        deleteTodo();
+        navigate('/', { replace: true });
     };
 
     if (!Number.isFinite(todoId)) {
         return <div>Некорректный id задачи</div>;
     }
 
-    if (!todo) {
-        return <div>Задача не найдена</div>;
-    }
+    if (isLoading) return <div>Загрузка...</div>;
+    if (error) return <div>Ошибка: {error}</div>;
+    if (!todo) return <div>Задача не найдена</div>;
 
     return (
         <div className={style.wrapper}>
@@ -41,7 +35,7 @@ export const TodoDetailPage = () => {
                         <button
                             type="button"
                             className={`${style.statusButton} ${todo.completed ? style.done : style.active}`}
-                            onClick={() => toggle(todo.id, !todo.completed)}
+                            onClick={() => toggleTodo(!todo.completed)} // 👈 Передаем только статус
                         >
                             {todo.completed ? '✅ Выполнена' : '🕒 Активна'}
                         </button>
@@ -49,7 +43,6 @@ export const TodoDetailPage = () => {
                 </div>
 
                 <h1 className={style.title}>{todo.title}</h1>
-
                 <p className={style.description}>
                     {todo.description?.trim() || 'Без описания'}
                 </p>

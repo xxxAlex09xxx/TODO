@@ -1,4 +1,4 @@
-import { useAddTodo } from '../model/useAddTodo';
+import { useTodos } from '@/entities/todo/model/useTodos';
 import style from './TodoForm.module.scss';
 
 interface AddTodoFormProps {
@@ -6,7 +6,7 @@ interface AddTodoFormProps {
 }
 
 export const AddTodoForm = ({ onClose }: AddTodoFormProps) => {
-    const addTodo = useAddTodo(); 
+    const {addTodo} = useTodos(); 
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();

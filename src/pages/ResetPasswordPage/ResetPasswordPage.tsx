@@ -1,38 +1,11 @@
-// app/pages/ResetPasswordPage/ResetPasswordPage.tsx
-import { useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import { resetPassword } from '@/shared/api/auth';
+// src/pages/ResetPasswordPage/ResetPasswordPage.tsx
+import { useResetPassword } from '@/features/reset-password/model/useResetPassword'; // 👈 Импорт хука
 import { ResetPasswordForm } from './ResetPasswordForm';
-import style from '../Login/LoginPage.module.scss';
+import style from './ResetPasswordPage.module.scss';
 
 export const ResetPasswordPage = () => {
-    const [searchParams] = useSearchParams();
-    const token = searchParams.get('token');
-    const navigate = useNavigate();
-
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState(false);
-    const [success, setSuccess] = useState(false);
-
-    const handleSubmit = async (password: string) => {
-        if (!token) {
-            setError('Ссылка недействительна (отсутствует токен)');
-            return;
-        }
-
-        setError(null);
-        setLoading(true);
-
-        try {
-            await resetPassword(token, password);
-            setSuccess(true);
-            setTimeout(() => navigate('/login'), 3000); // через 3 сек перекидываем на логин
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'Ошибка сброса пароля');
-        } finally {
-            setLoading(false);
-        }
-    };
+    // 👇 Вся логика теперь в одной строчке
+    const { token, error, loading, success, handleSubmit } = useResetPassword();
 
     if (success) {
         return (

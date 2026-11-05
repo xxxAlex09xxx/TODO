@@ -1,54 +1,47 @@
-// src/widgets/todo-list/TodoList.tsx
-import { useEffect, useMemo } from 'react';
-import { useAppSelector, useAppDispatch } from '../../../app/store/hooks';
-import { loadTodos } from '../../../entities/todo/model/slice';
-import { TodoItem } from '../../../entities/todo/ui/TodoItem'; // 👈 Импортируем карточку
-import { useToggleTodo } from '../../../features/toggle-todo/model/useToggleTodo';
-import { useDeleteTodo } from '../../../features/delete-todo/model/useDeleteTodo';
-import style from './TodoList.module.scss'
+// src/widgets/todo-list/ui/TodoList.tsx
+import { useMemo } from 'react';
+import { useTodos } from '@/entities/todo/model/useTodos'; // 👈 React Query
+import { useAppSelector } from '@/app/store/hooks'; // 👈 Redux (только для фильтра)
+import { TodoItem } from '@/entities/todo/ui/TodoItem';
+import style from './TodoList.module.scss';
+
+const FILTER_EMPTY_MESSAGES = {
+    all: 'У вас пока нет задач',
+    active: 'Все задачи выполнены!',
+    completed: 'Нет выполненных задач',
+};
 
 export const TodoList = () => {
-    const dispatch = useAppDispatch();
-    const { todos, loading, error, filter } = useAppSelector((state) => state.todos);
-    const toggle = useToggleTodo();
-    const remove = useDeleteTodo();
+    // 1. Берем задачи и функции из React Query
+    const { todos, loading, error, toggleTodo, deleteTodo } = useTodos();
+    
+    // 2. Берем фильтр из Redux
+    const filter = useAppSelector((state) => state.filter.filter);
 
-    useEffect(() => {
-        dispatch(loadTodos());
-    }, [dispatch]);
-    const FILTER_EMPTY_MESSAGES = {
-        all: 'У вас пока нет задач',
-        active: 'Все задачи выполнены!',
-        completed: 'Нет выполненных задач',
-    };
-
+    // 3. Фильтруем задачи
     const visibleTodos = useMemo(() => {
         switch (filter) {
-            case 'active':
-                return todos.filter(t => !t.completed);
-            case 'completed':
-                return todos.filter(t => t.completed);
-            case 'all':
-            default:
-                return todos;
+            case 'active': return todos.filter(t => !t.completed);
+            case 'completed': return todos.filter(t => t.completed);
+            default: return todos;
         }
     }, [todos, filter]);
 
     if (loading) return <p>Загрузка...</p>;
     if (error) return <p>Ошибка: {error}</p>;
     if (visibleTodos.length === 0) {
-        return <p className={style.emptyMessage}> {FILTER_EMPTY_MESSAGES[filter]} </p>
+        return <p className={style.emptyMessage}>{FILTER_EMPTY_MESSAGES[filter]}</p>;
     }
 
     return (
         <div className={style.listContainer}>
             <ul className={style.todoList}>
-                {visibleTodos.slice().reverse().map((todo) => (
+                {visibleTodos.map((todo) => (
                     <TodoItem
                         key={todo.id}
                         todo={todo}
-                        onToggle={() => toggle(todo.id, !todo.completed)}
-                        onDelete={() => remove(todo.id)}
+                        onToggle={toggleTodo} // 👈 Просто передаем функцию из хука
+                        onDelete={deleteTodo} // 👈 Она сама знает, что делать
                     />
                 ))}
             </ul>
