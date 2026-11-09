@@ -5,6 +5,7 @@ import {
     createTodo,
     updateTodo,
     deleteTodoById,
+    deleteTodoAll,
 } from '../api/todos';
 
 interface TodoStats {
@@ -55,6 +56,14 @@ export const useTodos = () => {
         },
     });
 
+    // 🗑️ Удаление ВСЕ
+    const deleteAllMutation  = useMutation({
+        mutationFn: deleteTodoAll,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: TODOS_KEY });
+        },
+    });
+
     // 📊 Статистика
     const stats: TodoStats = {
         total: todos.length,
@@ -85,6 +94,8 @@ export const useTodos = () => {
         },
 
         deleteTodo: (id: number) => deleteMutation.mutate(id),
+
+        deleteAllTodos:() => deleteAllMutation.mutate(),
 
         fetchTodos: () =>
             queryClient.invalidateQueries({ queryKey: TODOS_KEY }),

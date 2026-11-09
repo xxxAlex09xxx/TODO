@@ -31,7 +31,7 @@ export const fetchTodos = async () => {
 };
 
 // POST /todos → { todo }
-export const createTodo = async (data: { title: string; description: string }) => {
+export const createTodo = async (data: { title: string; description: string }):Promise<Todo> => {
     const response = await apiFetch(API_URL, {
         method: 'POST',
         body: JSON.stringify(data),
@@ -46,8 +46,8 @@ export const createTodo = async (data: { title: string; description: string }) =
 // PATCH /todos/:id → { todo }
 export const updateTodo = async (
     id: number,
-    patch: { title?: string; description?: string; completed?: boolean }
-) => {
+    patch: { completed?: boolean }
+):Promise<Todo> => {
     const response = await apiFetch(`${API_URL}/${id}`, {
         method: 'PATCH',
         body: JSON.stringify(patch),
@@ -68,6 +68,17 @@ export const deleteTodoById = async (id: number): Promise<void> => {
         throw new Error(`Ошибка: ${response.status}`);
     }
 };
+// DELETE /todos — удалить все задачи
+export const deleteTodoAll = async ():Promise<void>=>{
+    const response = await apiFetch(API_URL, {
+        method:'DELETE'
+ });
+    if (!response.ok) {
+        throw new Error(`Ошибка: ${response.status}`);
+    }
+};
+
+
 // GET /todo → { todo: Todo }
 export const fetchTodoById = async (id: number): Promise<Todo>=>{
     const response = await apiFetch(`${API_URL}/${id}`)

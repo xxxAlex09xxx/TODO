@@ -8,20 +8,17 @@ import { sendResetEmail } from '../utils/mailer';
 import {
     saveRefreshToken,
     findRefreshToken,
-    revokeRefreshToken,
-    revokeAllUserTokens,
+    hashToken, // 👈 ДОБАВИЛИ ИМПОРТ
 } from '../utils/tokens';
 import {
     createAccessToken,
     createRefreshToken,
     verifyRefreshToken,
-    verifyAccessToken,
 } from '../utils/jwt';
 import { config } from '../config';
 
 export const authRouter = Router();
 
-// Тип пользователя
 interface User {
     id: number;
     email: string;
@@ -74,7 +71,23 @@ authRouter.post('/register', async (req: Request<{}, {}, AuthBody>, res: Respons
                 const accessToken = createAccessToken(userId);
                 const refreshToken = createRefreshToken(userId);
 
+                console.log(`\n🔵 REGISTER: Пользователь ${email} создан (ID: ${userId})`);
+
+                // 👇 ЖЕСТКОЕ УДАЛЕНИЕ СТАРЫХ ТОКЕНОВ
+                await new Promise<void>((resolve, reject) => {
+                    db.run('DELETE FROM refresh_tokens WHERE user_id = ?', [userId], (delErr) => {
+                        if (delErr) {
+                            console.error('❌ Ошибка DELETE в REGISTER:', delErr.message);
+                            reject(delErr);
+                        } else {
+                            console.log('🗑️ Старые токены в REGISTER удалены (если были)');
+                            resolve();
+                        }
+                    });
+                });
+
                 await saveRefreshToken(userId, refreshToken);
+                console.log('✅ Новый токен сохранен в REGISTER');
 
                 res.cookie('refreshToken', refreshToken, {
                     httpOnly: true,
@@ -121,7 +134,23 @@ authRouter.post('/login', (req: Request<{}, {}, AuthBody>, res: Response) => {
         const accessToken = createAccessToken(user.id);
         const refreshToken = createRefreshToken(user.id);
 
+        console.log(`\n🟢 LOGIN: Пользователь ${email} вошел (ID: ${user.id})`);
+
+        // 👇 ЖЕСТКОЕ УДАЛЕНИЕ СТАРЫХ ТОКЕНОВ
+        await new Promise<void>((resolve, reject) => {
+            db.run('DELETE FROM refresh_tokens WHERE user_id = ?', [user.id], (delErr) => {
+                if (delErr) {
+                    console.error('❌ Ошибка DELETE в LOGIN:', delErr.message);
+                    reject(delErr);
+                } else {
+                    console.log('🗑️ Старые токены в LOGIN удалены');
+                    resolve();
+                }
+            });
+        });
+
         await saveRefreshToken(user.id, refreshToken);
+        console.log('✅ Новый токен сохранен в LOGIN');
 
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
@@ -142,6 +171,7 @@ authRouter.post('/refresh', async (req: Request, res: Response) => {
     const refreshToken = req.cookies.refreshToken;
 
     if (!refreshToken) {
+        console.log('❌ REFRESH: Токен отсутствует в куки');
         res.status(401).json({ error: 'Refresh token отсутствует' });
         return;
     }
@@ -150,6 +180,7 @@ authRouter.post('/refresh', async (req: Request, res: Response) => {
     try {
         payload = verifyRefreshToken(refreshToken);
     } catch {
+        console.log('❌ REFRESH: Невалидный токен');
         res.status(401).json({ error: 'Невалидный refresh token' });
         return;
     }
@@ -157,7 +188,7 @@ authRouter.post('/refresh', async (req: Request, res: Response) => {
     const stored = await findRefreshToken(refreshToken);
 
     if (!stored) {
-        await revokeAllUserTokens(payload.userId);
+        console.log('❌ REFRESH: Токен не найден в базе (возможно, удален)');
         res.clearCookie('refreshToken', {
             httpOnly: true,
             secure: config.isProd,
@@ -168,7 +199,7 @@ authRouter.post('/refresh', async (req: Request, res: Response) => {
     }
 
     if (stored.revoked === 1) {
-        await revokeAllUserTokens(payload.userId);
+        console.log('❌ REFRESH: Токен помечен как revoked');
         res.clearCookie('refreshToken', {
             httpOnly: true,
             secure: config.isProd,
@@ -179,6 +210,7 @@ authRouter.post('/refresh', async (req: Request, res: Response) => {
     }
 
     if (new Date(stored.expires_at).getTime() < Date.now()) {
+        console.log('❌ REFRESH: Токен истек');
         res.clearCookie('refreshToken', {
             httpOnly: true,
             secure: config.isProd,
@@ -188,11 +220,26 @@ authRouter.post('/refresh', async (req: Request, res: Response) => {
         return;
     }
 
-    await revokeRefreshToken(refreshToken);
+    console.log('🔄 REFRESH: Обновляем токен для user:', payload.userId);
+
+    // 👇 ХЕШИРУЕМ ТОКЕН И УДАЛЯЕМ ПО ХЕШУ
+    const tokenHash = hashToken(refreshToken);
+    await new Promise<void>((resolve, reject) => {
+        db.run('DELETE FROM refresh_tokens WHERE token_hash = ?', [tokenHash], (delErr) => {
+            if (delErr) {
+                console.error('❌ Ошибка DELETE в REFRESH:', delErr.message);
+                reject(delErr);
+            } else {
+                console.log('🗑️ Старый токен в REFRESH удален');
+                resolve();
+            }
+        });
+    });
 
     const newAccessToken = createAccessToken(payload.userId);
     const newRefreshToken = createRefreshToken(payload.userId);
     await saveRefreshToken(payload.userId, newRefreshToken);
+    console.log('✅ Новый токен сохранен в REFRESH');
 
     res.cookie('refreshToken', newRefreshToken, {
         httpOnly: true,
@@ -209,11 +256,16 @@ authRouter.post('/logout', async (req: Request, res: Response) => {
     const refreshToken = req.cookies.refreshToken;
 
     if (refreshToken) {
-        try {
-            await revokeRefreshToken(refreshToken);
-        } catch (err) {
-            console.error('Ошибка отзыва токена:', err);
-        }
+        console.log('🚪 LOGOUT: Удаляем токен при выходе');
+        // 👇 ХЕШИРУЕМ ТОКЕН И УДАЛЯЕМ ПО ХЕШУ
+        const tokenHash = hashToken(refreshToken);
+        await new Promise<void>((resolve) => {
+            db.run('DELETE FROM refresh_tokens WHERE token_hash = ?', [tokenHash], (delErr) => {
+                if (delErr) console.error('❌ Ошибка DELETE в LOGOUT:', delErr.message);
+                else console.log('🗑️ Токен удален в LOGOUT');
+                resolve();
+            });
+        });
     }
 
     res.clearCookie('refreshToken', {
@@ -225,7 +277,7 @@ authRouter.post('/logout', async (req: Request, res: Response) => {
     res.json({ message: 'Выход выполнен' });
 });
 
-// 📌 GET /auth/me — защищённый роут
+// 📌 GET /auth/me
 authRouter.get('/me', authMiddleware, (req: AuthRequest, res: Response) => {
     res.setHeader('Cache-Control', 'no-store');
     
@@ -244,10 +296,6 @@ authRouter.get('/me', authMiddleware, (req: AuthRequest, res: Response) => {
     });
 });
 
-// ==========================================
-// 👇 НОВЫЕ РОУТЫ ДЛЯ СБРОСА ПАРОЛЯ
-// ==========================================
-
 // 📌 POST /auth/forgot-password
 authRouter.post('/forgot-password', async (req: Request, res: Response) => {
     const { email } = req.body;
@@ -258,7 +306,6 @@ authRouter.post('/forgot-password', async (req: Request, res: Response) => {
     }
 
     db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user: User | undefined) => {
-        // Всегда отвечаем 200, даже если юзера нет (защита от перебора)
         if (err || !user) {
             res.json({ message: 'Если email зарегистрирован, письмо отправлено' });
             return;
@@ -289,7 +336,7 @@ authRouter.post('/reset-password', async (req: Request, res: Response) => {
     const { token, newPassword } = req.body;
 
     if (!token || !newPassword || newPassword.length < 6) {
-        res.status(400).json({ error: 'Неверные данные (токен или пароль слишком короткие)' });
+        res.status(400).json({ error: 'Неверные данные' });
         return;
     }
 
@@ -318,14 +365,12 @@ authRouter.post('/reset-password', async (req: Request, res: Response) => {
                         return;
                     }
 
-                    // 👇 УДАЛЯЕМ ВСЕ СЕССИИ ПОЛЬЗОВАТЕЛЯ
                     db.run(
                         'DELETE FROM refresh_tokens WHERE user_id = ?',
                         [user.id],
                         (deleteErr) => {
                             if (deleteErr) {
                                 console.error('❌ Ошибка удаления refresh-токенов:', deleteErr);
-                                // Не прерываем выполнение, пароль уже изменен
                             }
                             res.json({ message: 'Пароль успешно изменен. Все сессии сброшены.' });
                         }

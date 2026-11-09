@@ -7,6 +7,7 @@ import { LogoutButton } from '@/features/logout/ui/LogoutButton';
 import { TodoState } from '@/entities/todo/ui/TodoState';
 import { TodoFilters } from '@/features/filter-todo/ui/TodoFilter';
 import { Modal } from '@/shared/ui/Modal/Modal';
+import { ClearAllButton } from '@/features/clear-todos/ui/ClearAllButton'
 
 export const TodosPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -36,6 +37,7 @@ export const TodosPage = () => {
 
                     <div className={style.logoutWrapper}>
                         <LogoutButton />
+                        <ClearAllButton/>
                         <TodoState />
                     </div>
                 </div>

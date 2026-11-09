@@ -11,7 +11,7 @@ todosRouter.use(authMiddleware);
 interface Todo {
     id: number;
     title: string;
-    description: string;   // 👈 добавили
+    description: string;
     completed: number;
     user_id: number;
     created_at: string;
@@ -60,7 +60,7 @@ todosRouter.get('/:id', (req: AuthRequest, res: Response) => {
 
 // 📌 POST /todos — создать задачу
 todosRouter.post('/', (req: AuthRequest, res: Response) => {
-    const { title, description } = req.body;   // 👈 читаем description
+    const { title, description } = req.body;
 
     if (!title || typeof title !== 'string' || title.trim().length === 0) {
         res.status(400).json({ error: 'title обязателен' });
@@ -71,7 +71,6 @@ todosRouter.post('/', (req: AuthRequest, res: Response) => {
         typeof description === 'string' ? description.trim() : '';
 
     db.run(
-        // 👇 добавили description в INSERT
         'INSERT INTO todos (title, description, user_id) VALUES (?, ?, ?)',
         [title.trim(), safeDescription, req.userId],
         function (this: { lastID: number }, err) {
@@ -95,10 +94,10 @@ todosRouter.post('/', (req: AuthRequest, res: Response) => {
     );
 });
 
-// 📌 PATCH /todos/:id — обновить задачу (title, description и/или completed)
+// 📌 PATCH /todos/:id — обновить задачу
 todosRouter.patch('/:id', (req: AuthRequest, res: Response) => {
     const todoId = Number(req.params.id);
-    const { title, description, completed } = req.body;   // 👈 читаем description
+    const { title, description, completed } = req.body;
 
     if (isNaN(todoId)) {
         res.status(400).json({ error: 'Некорректный id' });
@@ -121,7 +120,6 @@ todosRouter.patch('/:id', (req: AuthRequest, res: Response) => {
             const newTitle =
                 typeof title === 'string' && title.trim() ? title.trim() : todo.title;
 
-            // 👇 новое поле — если пришло, обновляем; иначе оставляем как было
             const newDescription =
                 typeof description === 'string' ? description.trim() : todo.description;
 
@@ -129,7 +127,6 @@ todosRouter.patch('/:id', (req: AuthRequest, res: Response) => {
                 typeof completed === 'boolean' ? (completed ? 1 : 0) : todo.completed;
 
             db.run(
-                // 👇 добавили description в UPDATE
                 'UPDATE todos SET title = ?, description = ?, completed = ? WHERE id = ?',
                 [newTitle, newDescription, newCompleted, todoId],
                 (err) => {
@@ -151,7 +148,22 @@ todosRouter.patch('/:id', (req: AuthRequest, res: Response) => {
     );
 });
 
-// 📌 DELETE /todos/:id — удалить задачу
+// 👇 НОВЫЙ РОУТ: DELETE /todos — удалить ВСЕ задачи (должен быть до /:id)
+todosRouter.delete('/', (req: AuthRequest, res: Response) => {
+    db.run(
+        'DELETE FROM todos WHERE user_id = ?',
+        [req.userId],
+        function (this: { changes: number }, err) {
+            if (err) {
+                res.status(500).json({ error: err.message });
+                return;
+            }
+            res.json({ message: `Удалено задач: ${this.changes}` });
+        }
+    );
+});
+
+// 📌 DELETE /todos/:id — удалить одну задачу
 todosRouter.delete('/:id', (req: AuthRequest, res: Response) => {
     const todoId = Number(req.params.id);
 
