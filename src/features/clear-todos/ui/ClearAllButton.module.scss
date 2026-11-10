@@ -14,3 +14,41 @@
         opacity: 0.8;
     }
 }
+
+.modalText {
+    margin-bottom: $space-md; // 16px
+    font-size: $font-size-base;
+    color: $color-text;
+    line-height: 1.5;
+} 
+.actions {
+    display: flex;
+    gap: $space-sm; // 8px
+    justify-content: flex-end; // Кнопки справа
+}
+.cancelButton {
+    padding: 8px 16px;
+    background: transparent;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    cursor: pointer;
+    color: $color-text;
+    transition: background 0.2s;
+
+    &:hover {
+        background: $color-border;
+    }
+}
+.confirmButton {
+    padding: 8px 16px;
+    background: $color-danger;
+    color: #fff;
+    border: none;
+    border-radius: $radius-md;
+    cursor: pointer;
+    transition: opacity 0.2s;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}

@@ -90,4 +90,13 @@ function createTables(): void {
         }
     });
 
+        // ⚠️ Миграция для таблицы users (добавляем роль)
+    db.run(`ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'user'`, (err) => {
+        if (err && !err.message.includes('duplicate column')) {
+            console.error('❌ Миграция role не удалась:', err.message);
+        } else {
+            console.log('✅ Колонка role готова (или уже была)');
+        }
+    });
+
 }

@@ -8,7 +8,7 @@ import { sendResetEmail } from '../utils/mailer';
 import {
     saveRefreshToken,
     findRefreshToken,
-    hashToken, // 👈 ДОБАВИЛИ ИМПОРТ
+    hashToken,
 } from '../utils/tokens';
 import {
     createAccessToken,
@@ -24,6 +24,7 @@ interface User {
     email: string;
     password_hash: string;
     created_at: string;
+    role: string; // 👈 ДОБАВИЛИ
 }
 
 interface AuthBody {
@@ -73,7 +74,6 @@ authRouter.post('/register', async (req: Request<{}, {}, AuthBody>, res: Respons
 
                 console.log(`\n🔵 REGISTER: Пользователь ${email} создан (ID: ${userId})`);
 
-                // 👇 ЖЕСТКОЕ УДАЛЕНИЕ СТАРЫХ ТОКЕНОВ
                 await new Promise<void>((resolve, reject) => {
                     db.run('DELETE FROM refresh_tokens WHERE user_id = ?', [userId], (delErr) => {
                         if (delErr) {
@@ -97,7 +97,7 @@ authRouter.post('/register', async (req: Request<{}, {}, AuthBody>, res: Respons
                 });
                 res.status(201).json({
                     accessToken,
-                    user: { id: userId, email },
+                    user: { id: userId, email, role: 'user' }, // 👈 ДОБАВИЛИ role
                 });
             }
         );
@@ -136,7 +136,6 @@ authRouter.post('/login', (req: Request<{}, {}, AuthBody>, res: Response) => {
 
         console.log(`\n🟢 LOGIN: Пользователь ${email} вошел (ID: ${user.id})`);
 
-        // 👇 ЖЕСТКОЕ УДАЛЕНИЕ СТАРЫХ ТОКЕНОВ
         await new Promise<void>((resolve, reject) => {
             db.run('DELETE FROM refresh_tokens WHERE user_id = ?', [user.id], (delErr) => {
                 if (delErr) {
@@ -161,7 +160,7 @@ authRouter.post('/login', (req: Request<{}, {}, AuthBody>, res: Response) => {
 
         res.json({
             accessToken,
-            user: { id: user.id, email: user.email },
+            user: { id: user.id, email: user.email, role: user.role }, // 👈 ДОБАВИЛИ role
         });
     });
 });
@@ -222,7 +221,6 @@ authRouter.post('/refresh', async (req: Request, res: Response) => {
 
     console.log('🔄 REFRESH: Обновляем токен для user:', payload.userId);
 
-    // 👇 ХЕШИРУЕМ ТОКЕН И УДАЛЯЕМ ПО ХЕШУ
     const tokenHash = hashToken(refreshToken);
     await new Promise<void>((resolve, reject) => {
         db.run('DELETE FROM refresh_tokens WHERE token_hash = ?', [tokenHash], (delErr) => {
@@ -257,7 +255,6 @@ authRouter.post('/logout', async (req: Request, res: Response) => {
 
     if (refreshToken) {
         console.log('🚪 LOGOUT: Удаляем токен при выходе');
-        // 👇 ХЕШИРУЕМ ТОКЕН И УДАЛЯЕМ ПО ХЕШУ
         const tokenHash = hashToken(refreshToken);
         await new Promise<void>((resolve) => {
             db.run('DELETE FROM refresh_tokens WHERE token_hash = ?', [tokenHash], (delErr) => {
@@ -281,7 +278,8 @@ authRouter.post('/logout', async (req: Request, res: Response) => {
 authRouter.get('/me', authMiddleware, (req: AuthRequest, res: Response) => {
     res.setHeader('Cache-Control', 'no-store');
     
-    db.get('SELECT id, email FROM users WHERE id = ?', [req.userId], (err, user) => {
+    // 👇 ДОБАВИЛИ role в SELECT
+    db.get('SELECT id, email, role FROM users WHERE id = ?', [req.userId], (err, user) => {
         if (err) {
             res.status(500).json({ error: err.message });
             return;

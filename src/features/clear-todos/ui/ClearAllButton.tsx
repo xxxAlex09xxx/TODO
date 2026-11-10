@@ -1,19 +1,52 @@
+import { useState } from 'react';
 import { useTodos } from '@/entities/todo/model/useTodos';
+import { Modal } from '@/shared/ui/Modal/Modal';
 import style from './ClearAllButton.module.scss';
+
+
 
 export const ClearAllButton = () => {
     const { deleteAllTodos } = useTodos();
 
-    const handleClick = () => {
-        const isConfirmed = window.confirm('Вы уверены, что хотите удалить ВСЕ задачи?');
-        if (isConfirmed) {
-            deleteAllTodos();
-        }
+    const [isModalOpen, setIsOpenModal] = useState(false);
+
+    const handleConfirm = () => {
+        deleteAllTodos();
+        setIsOpenModal(false);
     };
 
     return (
-        <button className={style.clearButton} onClick={handleClick}>
-            Очистить всё
-        </button>
-    );
-};
+        <>
+            <button
+                className={style.clearButton}
+                onClick={() => setIsOpenModal(true)}>
+                Очистить все
+            </button>
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsOpenModal(false)}
+                title="Удаление всех задач"
+            >
+                <p className={style.modalText}> Вы уверены, что хотите удалить <strong>ВСЕ</strong> задачи?
+                    Это действие нельзя отменить. </p>
+
+                <div className={style.actions}>
+                    <button
+                        className={style.cancelButton}
+                        onClick={() => setIsOpenModal(false)}
+                    >
+                        Отмена
+                    </button>
+                    <button
+                        className={style.confirmButton}
+                        onClick={handleConfirm}
+                    >
+                        Да, удалить.
+                    </button>
+                </div>
+
+            </Modal>
+        </>
+    )
+
+}

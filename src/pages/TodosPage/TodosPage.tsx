@@ -7,7 +7,8 @@ import { LogoutButton } from '@/features/logout/ui/LogoutButton';
 import { TodoState } from '@/entities/todo/ui/TodoState';
 import { TodoFilters } from '@/features/filter-todo/ui/TodoFilter';
 import { Modal } from '@/shared/ui/Modal/Modal';
-import { ClearAllButton } from '@/features/clear-todos/ui/ClearAllButton'
+import { ClearAllButton } from '@/features/clear-todos/ui/ClearAllButton';
+import { UserProfile } from '@/features/logout/ui/UserProfile';
 
 export const TodosPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,6 +21,9 @@ export const TodosPage = () => {
                 <div className={`${style.heroBg} ${style.darkBg}`} />
 
                 <div className={style.heroGrid}>
+                    <div>
+                        <UserProfile/>
+                    </div>
                     <div className={style.containerHed}>
                         <div className={style.header}>
                             <h1>T O D O</h1>
@@ -37,7 +41,6 @@ export const TodosPage = () => {
 
                     <div className={style.logoutWrapper}>
                         <LogoutButton />
-                        <ClearAllButton/>
                         <TodoState />
                     </div>
                 </div>
@@ -46,6 +49,9 @@ export const TodosPage = () => {
             <div className={style.container}>
                 <div className={style.todoColumn}>
                     <TodoList />
+                </div>
+                <div className={style.logoutWrapper}>
+                    <ClearAllButton/>
                 </div>
             </div>
 

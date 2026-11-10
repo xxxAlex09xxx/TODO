@@ -7,6 +7,7 @@ const AUTH_URL = 'http://localhost:5000/auth';
 export interface User {
     id: number;
     email: string;
+     role: 'user' | 'admin';
 }
 
 

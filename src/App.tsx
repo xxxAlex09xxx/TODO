@@ -9,6 +9,8 @@ import { ForgotPasswordPage } from './pages/ForgotPasswordPage/ForgotPasswordPag
 import { ResetPasswordPage } from './pages/ResetPasswordPage/ResetPasswordPage';
 import './style/global.scss';
 import { useAppSelector } from './app/store/hooks';
+import { AdminPage } from './pages/AdminPage/AdminPage';
+import { AdminRoute } from './shared/ui/AdminRoute/AdminRoute';
 
 function App() {
     const theme = useAppSelector((state) => state.theme.theme);
@@ -38,6 +40,15 @@ function App() {
                                 </ProtectedRoute>
                             }
                         />
+                        {/* 👇 Админка */}
+                            <Route
+                                path="/admin"
+                                element={
+                                    <AdminRoute>
+                                        <AdminPage />
+                                    </AdminRoute>
+                                }
+                            />
                     </Routes>
                 </AuthProvider>
             </BrowserRouter>
