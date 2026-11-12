@@ -11,7 +11,7 @@ export const LogoutButton = () => {
 
     const handleLogout = async () => {
         await logout(); // Очищает куки на сервере 
-        queryClient.clear(); // 👈 Очищаем весь кэш React Query
+        queryClient.clear(); //  Очищаем весь кэш React Query
         navigate('/login');
     };
     return (

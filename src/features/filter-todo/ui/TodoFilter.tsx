@@ -1,7 +1,7 @@
 // src/features/filter-todo/ui/TodoFilters.tsx
-import { useAppDispatch, useAppSelector } from '@/app/store/hooks';
-import { setFilter } from '@/entities/filter/model/slice';
-import type { TaskFilter } from '@/entities/todo/model/types';
+import { useAppDispatch, useAppSelector } from '@/app/store';
+import { setFilter } from '@/entities/filter';
+import type { TaskFilter } from '@/entities/todo';
 import style from './TodoFilter.module.scss'; // 👈 Скопируй стили из старого проекта
 
 export const TodoFilters = () => {

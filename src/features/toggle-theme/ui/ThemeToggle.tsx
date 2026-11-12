@@ -1,5 +1,5 @@
-import { useAppDispatch, useAppSelector } from "@/app/store/hooks";
-import { toggleTheme } from "@/entities/theme/model/slice";
+import { useAppDispatch, useAppSelector } from "@/app/store";
+import { toggleTheme } from "@/entities/theme";
 import style from './ThemeToggle.module.scss'
 
 import moonIcon from '@/assets/moonIcon.png';

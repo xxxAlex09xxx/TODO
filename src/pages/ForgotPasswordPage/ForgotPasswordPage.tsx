@@ -1,9 +1,9 @@
 // src/pages/ForgotPasswordPage/ForgotPasswordPage.tsx
 import { Link } from 'react-router-dom';
-import { ForgotPasswordForm } from '@/features/forgot-password/ui/ForgotPasswordForm'; // 👈 Импорт формы
+import { ForgotPasswordForm } from '@/features/forgot-password';
 import style from './ForgotPasswordPage.module.scss';
 
-export const ForgotPasswordPage = () => {
+const ForgotPasswordPage = () => {
     return (
         <div className={style.page}>
             <div className={style.card}>
@@ -21,3 +21,4 @@ export const ForgotPasswordPage = () => {
         </div>
     );
 };
+export default ForgotPasswordPage;

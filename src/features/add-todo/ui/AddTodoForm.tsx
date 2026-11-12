@@ -1,4 +1,4 @@
-import { useTodos } from '@/entities/todo/model/useTodos';
+import { useTodos } from '@/entities/todo';
 import style from './TodoForm.module.scss';
 
 interface AddTodoFormProps {

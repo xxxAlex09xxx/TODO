@@ -1,6 +1,6 @@
 // src/pages/ForgotPasswordPage/ForgotPasswordForm.tsx
 import { useState } from 'react';
-import { forgotPassword } from '@/shared/api/auth';
+import { forgotPassword } from '@/shared/api';
 import style from './ForgotPasswordForm.module.scss'; // 👈 Стили лежат в папке страницы
 
 export const ForgotPasswordForm = () => {

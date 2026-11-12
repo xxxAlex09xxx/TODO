@@ -1,7 +1,7 @@
 // src/app/store/store.ts
 import { configureStore } from '@reduxjs/toolkit';
-import themeReducer from '@/entities/theme/model/slice';
-import filterReducer from '../../entities/filter/model/slice';
+import {themeReducer} from '@/entities/theme';
+import {filterReducer} from '@/entities/filter';
 
 export const store = configureStore({
     reducer: { 

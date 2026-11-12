@@ -1,9 +1,9 @@
 // src/pages/ResetPasswordPage/ResetPasswordPage.tsx
-import { useResetPassword } from '@/features/reset-password/model/useResetPassword'; // 👈 Импорт хука
+import { useResetPassword } from '@/features/reset-password'; 
 import { ResetPasswordForm } from './ResetPasswordForm';
 import style from './ResetPasswordPage.module.scss';
 
-export const ResetPasswordPage = () => {
+const ResetPasswordPage = () => {
     // 👇 Вся логика теперь в одной строчке
     const { token, error, loading, success, handleSubmit } = useResetPassword();
 
@@ -27,3 +27,4 @@ export const ResetPasswordPage = () => {
         />
     );
 };
+export default  ResetPasswordPage;

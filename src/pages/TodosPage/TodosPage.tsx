@@ -1,16 +1,17 @@
 // src/pages/TodosPage/TodosPage.tsx
 import { useState } from 'react';
 import style from './TodosPage.module.scss';
-import { TodoList } from '@/widgets/todo-list/ui/TodoList';
-import { AddTodoForm } from '@/features/add-todo/ui/AddTodoForm';
-import { LogoutButton } from '@/features/logout/ui/LogoutButton';
-import { TodoState } from '@/entities/todo/ui/TodoState';
-import { TodoFilters } from '@/features/filter-todo/ui/TodoFilter';
-import { Modal } from '@/shared/ui/Modal/Modal';
-import { ClearAllButton } from '@/features/clear-todos/ui/ClearAllButton';
-import { UserProfile } from '@/features/logout/ui/UserProfile';
+import { TodoList } from '@/widgets/todo-list';
+import { AddTodoForm } from '@/features/add-todo';
+import { ClearAllButton } from '@/features/clear-todos';
+import { TodoFilters } from '@/features/filter-todo';
+import { LogoutButton, UserProfile } from '@/features/logout';
+import { TodoState } from '@/entities/todo';
+import { Modal } from '@/shared/ui';
 
-export const TodosPage = () => {
+
+
+const TodosPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
@@ -65,3 +66,4 @@ export const TodosPage = () => {
         </div>
     );
 };
+export default TodosPage;

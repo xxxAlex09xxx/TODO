@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { useTodos } from '@/entities/todo/model/useTodos';
-import { Modal } from '@/shared/ui/Modal/Modal';
+import { useTodos } from '@/entities/todo';
+import { Modal } from '@/shared/ui';
 import style from './ClearAllButton.module.scss';
 
 

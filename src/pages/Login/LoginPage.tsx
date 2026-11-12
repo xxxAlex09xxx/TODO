@@ -1,11 +1,11 @@
 // app/pages/Login/LoginPage.tsx
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login, register } from '@/shared/api/auth';
+import { login, register } from '@/shared/api';
 import { useAuth } from '@/app/providers/AuthProvider';
 import { LoginForm } from './LoginForm'; // 👈 Импортируем нашу форму
 
-export const LoginPage = () => {
+ const LoginPage = () => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [mode, setMode] = useState<'login' | 'register'>('login');
@@ -49,3 +49,4 @@ export const LoginPage = () => {
         />
     );
 };
+export default LoginPage;

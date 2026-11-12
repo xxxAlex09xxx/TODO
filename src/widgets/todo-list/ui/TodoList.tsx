@@ -1,8 +1,7 @@
 // src/widgets/todo-list/ui/TodoList.tsx
 import { useMemo } from 'react';
-import { useTodos } from '@/entities/todo/model/useTodos'; // 👈 React Query
-import { useAppSelector } from '@/app/store/hooks'; // 👈 Redux (только для фильтра)
-import { TodoItem } from '@/entities/todo/ui/TodoItem';
+import { useTodos, TodoItem } from '@/entities/todo'; 
+import { useAppSelector } from '@/app/store'; 
 import style from './TodoList.module.scss';
 
 const FILTER_EMPTY_MESSAGES = {
@@ -40,8 +39,8 @@ export const TodoList = () => {
                     <TodoItem
                         key={todo.id}
                         todo={todo}
-                        onToggle={toggleTodo} // 👈 Просто передаем функцию из хука
-                        onDelete={deleteTodo} // 👈 Она сама знает, что делать
+                        onToggle={toggleTodo} 
+                        onDelete={deleteTodo} 
                     />
                 ))}
             </ul>

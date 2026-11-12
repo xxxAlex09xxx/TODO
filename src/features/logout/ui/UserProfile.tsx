@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '@/app/providers/AuthProvider';
-import { ThemeToggle } from '@/features/toggle-theme/ui/ThemeToggle';
+import { ThemeToggle } from '@/features/toggle-theme';
 import style from './UserProfile.module.scss';
 
 export const UserProfile = () => {

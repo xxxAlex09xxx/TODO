@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 
-export const AdminPage = () => {
+const AdminPage = () => {
     return (
         <div style={{ padding: '40px', textAlign: 'center' }}>
             <h1>Админ-панель</h1>
@@ -9,3 +9,4 @@ export const AdminPage = () => {
         </div>
     );
 };
+export default AdminPage;

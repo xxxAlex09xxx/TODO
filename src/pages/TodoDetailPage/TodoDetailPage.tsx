@@ -1,14 +1,14 @@
 // src/pages/TodoDetailPage/TodoDetailPage.tsx
 import { useParams, useNavigate } from 'react-router-dom';
-import { useTodo } from '@/entities/todo/model/useTodo'; // 👈 Импорт нового хука
+import { useTodo } from '@/entities/todo'; 
 import style from './TodoDetailPage.module.scss';
 
-export const TodoDetailPage = () => {
+const TodoDetailPage = () => {
     const { id } = useParams<{ id: string }>();
     const todoId = Number(id);
     const navigate = useNavigate();
 
-    // 👇 Используем новый хук
+    
     const { todo, isLoading, error, toggleTodo, deleteTodo } = useTodo(todoId);
 
     const handleDelete = () => {
@@ -16,7 +16,7 @@ export const TodoDetailPage = () => {
         navigate('/', { replace: true });
     };
 
-    if (!Number.isFinite(todoId)) {
+    if (!Number.isFinite(todoId)) {              //проверка что число
         return <div>Некорректный id задачи</div>;
     }
 
@@ -35,7 +35,7 @@ export const TodoDetailPage = () => {
                         <button
                             type="button"
                             className={`${style.statusButton} ${todo.completed ? style.done : style.active}`}
-                            onClick={() => toggleTodo(!todo.completed)} // 👈 Передаем только статус
+                            onClick={() => toggleTodo(!todo.completed)} 
                         >
                             {todo.completed ? '✅ Выполнена' : '🕒 Активна'}
                         </button>
@@ -54,3 +54,4 @@ export const TodoDetailPage = () => {
         </div>
     );
 };
+export default TodoDetailPage;
