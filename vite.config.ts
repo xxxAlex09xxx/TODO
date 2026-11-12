@@ -1,11 +1,12 @@
-import { defineConfig } from 'vite';
+// vite.config.ts
+/// <reference types="vitest" />   // 👈 Важно: три слэша!
+import { defineConfig } from 'vitest/config'; // 👈 Импорт из vitest/config
 import react from '@vitejs/plugin-react';
-import path from 'path'; // 👈 1. Импортируем path для алиасов
+import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
   
-  // 👈 2. Добавляем алиасы
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
@@ -14,11 +15,16 @@ export default defineConfig({
 
   server: {
     host: '0.0.0.0',
-    port: 5173, // 👈 Твой любимый порт
-    // ПРОКСИ НЕ НУЖЕН - используем Express сервер (оставляем как было)
+    port: 5173,
   },
 
   build: {
     outDir: 'dist'
-  }
+  },
+
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './src/setupTests.ts',
+  },
 });

@@ -6,7 +6,7 @@ import { AddTodoForm } from '@/features/add-todo';
 import { ClearAllButton } from '@/features/clear-todos';
 import { TodoFilters } from '@/features/filter-todo';
 import { LogoutButton, UserProfile } from '@/features/logout';
-import { TodoState } from '@/entities/todo';
+import { TodoStats } from '@/entities/todo';
 import { Modal } from '@/shared/ui';
 
 
@@ -42,7 +42,7 @@ const TodosPage = () => {
 
                     <div className={style.logoutWrapper}>
                         <LogoutButton />
-                        <TodoState />
+                        <TodoStats />
                     </div>
                 </div>
             </div>

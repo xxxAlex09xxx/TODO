@@ -1,15 +1,18 @@
 // src/entities/todo/ui/TodoState.tsx
-import { useTodos } from '../model/useTodos'; // 👈 Импорт хука
 import style from './TodoState.module.scss';
 
-export const TodoState = () => {
-    const { stats } = useTodos(); // 👈 Берем статистику из хука
+interface TodoStateProps {
+    total: number;
+    completed: number;
+    active: number;
+}
 
+export const TodoState = ({ total, completed, active }: TodoStateProps) => {
     return (
         <div className={style.todoStats}>
-            <span>Всего: {stats.total}</span>
-            <span>✅ Выполнено: {stats.completed}</span>
-            <span>⏳ Осталось: {stats.active}</span>
+            <span>Всего: {total}</span>
+            <span>✅ Выполнено: {completed}</span>
+            <span>⏳ Осталось: {active}</span>
         </div>
     );
 };

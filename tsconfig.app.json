@@ -17,7 +17,7 @@
     "noFallthroughCasesInSwitch": true,
     
     // 👇 Убрали vitest и testing-library, оставили только базовые типы Vite
-    "types": ["vite/client"],
+    "types": ["vitest/globals", "@testing-library/jest-dom", "vite/client"],
 
     // 👇 ДОБАВИЛИ АЛИАСЫ
     "baseUrl": ".",
