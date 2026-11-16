@@ -1,0 +1,1 @@
+export {TodoDetailWidget} from './ui/TodoDetailWidget'

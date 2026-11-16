@@ -1,1 +1,2 @@
-export { AddTodoForm } from './ui/AddTodoForm';
+export { TodoFormContainer  } from './ui/TodoFormContainer';
+export { TodoForm } from './ui/TodoForm';

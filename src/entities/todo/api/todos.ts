@@ -46,7 +46,7 @@ export const createTodo = async (data: { title: string; description: string }):P
 // PATCH /todos/:id → { todo }
 export const updateTodo = async (
     id: number,
-    patch: { completed?: boolean }
+    patch: { completed?: boolean, title?: string; description?: string }
 ):Promise<Todo> => {
     const response = await apiFetch(`${API_URL}/${id}`, {
         method: 'PATCH',
@@ -59,7 +59,7 @@ export const updateTodo = async (
     return formatTodo(data.todo);
 };
 
-// DELETE /todos/:id → { message }
+// DELETE /todo/:id → удалить задачу
 export const deleteTodoById = async (id: number): Promise<void> => {
     const response = await apiFetch(`${API_URL}/${id}`, {
         method: 'DELETE',

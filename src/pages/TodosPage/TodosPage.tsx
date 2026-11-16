@@ -1,8 +1,8 @@
 // src/pages/TodosPage/TodosPage.tsx
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import style from './TodosPage.module.scss';
 import { TodoList } from '@/widgets/todo-list';
-import { AddTodoForm } from '@/features/add-todo';
+import { TodoFormContainer } from '@/features/add-todo';
 import { ClearAllButton } from '@/features/clear-todos';
 import { TodoFilters } from '@/features/filter-todo';
 import { LogoutButton, UserProfile } from '@/features/logout';
@@ -13,6 +13,8 @@ import { Modal } from '@/shared/ui';
 
 const TodosPage = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const openModal = useCallback(() => setIsModalOpen(true), []);
+    const closeModal = useCallback(() => setIsModalOpen(false), []);
 
     return (
         <div className={style.wrapper}>
@@ -23,7 +25,7 @@ const TodosPage = () => {
 
                 <div className={style.heroGrid}>
                     <div>
-                        <UserProfile/>
+                        <UserProfile />
                     </div>
                     <div className={style.containerHed}>
                         <div className={style.header}>
@@ -32,7 +34,7 @@ const TodosPage = () => {
 
                         <button
                             className={style.addButton}
-                            onClick={() => setIsModalOpen(true)}
+                            onClick={openModal}
                         >
                             + Добавить задачу
                         </button>
@@ -52,16 +54,20 @@ const TodosPage = () => {
                     <TodoList />
                 </div>
                 <div className={style.logoutWrapper}>
-                    <ClearAllButton/>
+                    <ClearAllButton />
                 </div>
             </div>
-
+v
             <Modal
                 isOpen={isModalOpen}
-                onClose={() => setIsModalOpen(false)}
+                onClose={closeModal}
                 title="Новая задача"
             >
-                <AddTodoForm onClose={() => setIsModalOpen(false)} />
+                <TodoFormContainer
+                    mode="create"
+                    onSuccess={closeModal}
+                    onCancel={closeModal}
+                />
             </Modal>
         </div>
     );

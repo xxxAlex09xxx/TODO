@@ -1,0 +1,222 @@
+[
+  {
+    "name": "AdminPage",
+    "path": "src/pages/AdminPage/AdminPage.tsx",
+    "lines": 9,
+    "dependencies": [
+      "Link"
+    ]
+  },
+  {
+    "name": "AdminRoute",
+    "path": "src/shared/ui/AdminRoute/AdminRoute.tsx",
+    "lines": 12,
+    "dependencies": [
+      "LoadingState",
+      "Navigate"
+    ]
+  },
+  {
+    "name": "App",
+    "path": "src/App.tsx",
+    "lines": 44,
+    "dependencies": [
+      "AdminRoute",
+      "AuthProvider",
+      "BrowserRouter",
+      "LoadingState",
+      "ProtectedRoute",
+      "Route",
+      "Routes",
+      "Suspense"
+    ]
+  },
+  {
+    "name": "AuthProvider",
+    "path": "src/app/providers/AuthProvider.tsx",
+    "lines": 49,
+    "dependencies": []
+  },
+  {
+    "name": "ClearAllButton",
+    "path": "src/features/clear-todos/ui/ClearAllButton.tsx",
+    "lines": 45,
+    "dependencies": [
+      "Modal"
+    ]
+  },
+  {
+    "name": "ForgotPasswordForm",
+    "path": "src/features/forgot-password/ui/ForgotPasswordForm.tsx",
+    "lines": 52,
+    "dependencies": []
+  },
+  {
+    "name": "ForgotPasswordPage",
+    "path": "src/pages/ForgotPasswordPage/ForgotPasswordPage.tsx",
+    "lines": 18,
+    "dependencies": [
+      "ForgotPasswordForm",
+      "Link"
+    ]
+  },
+  {
+    "name": "LoadingState",
+    "path": "src/shared/ui/LoadingState/LoadingState.tsx",
+    "lines": 9,
+    "dependencies": []
+  },
+  {
+    "name": "LoginForm",
+    "path": "src/pages/Login/LoginForm.tsx",
+    "lines": 67,
+    "dependencies": [
+      "Link"
+    ]
+  },
+  {
+    "name": "LoginPage",
+    "path": "src/pages/Login/LoginPage.tsx",
+    "lines": 44,
+    "dependencies": [
+      "LoginForm"
+    ]
+  },
+  {
+    "name": "LogoutButton",
+    "path": "src/features/logout/ui/LogoutButton.tsx",
+    "lines": 22,
+    "dependencies": []
+  },
+  {
+    "name": "Modal",
+    "path": "src/shared/ui/Modal/Modal.tsx",
+    "lines": 13,
+    "dependencies": [
+      "Dialog"
+    ]
+  },
+  {
+    "name": "ProtectedRoute",
+    "path": "src/shared/ui/ProtectedRoute.tsx",
+    "lines": 15,
+    "dependencies": [
+      "LoadingState",
+      "Navigate"
+    ]
+  },
+  {
+    "name": "ResetPasswordForm",
+    "path": "src/pages/ResetPasswordPage/ResetPasswordForm.tsx",
+    "lines": 45,
+    "dependencies": [
+      "Link"
+    ]
+  },
+  {
+    "name": "ResetPasswordPage",
+    "path": "src/pages/ResetPasswordPage/ResetPasswordPage.tsx",
+    "lines": 24,
+    "dependencies": [
+      "ResetPasswordForm"
+    ]
+  },
+  {
+    "name": "ThemeToggle",
+    "path": "src/features/toggle-theme/ui/ThemeToggle.tsx",
+    "lines": 18,
+    "dependencies": []
+  },
+  {
+    "name": "TodoDetailPage",
+    "path": "src/pages/TodoDetailPage/TodoDetailPage.tsx",
+    "lines": 8,
+    "dependencies": [
+      "TodoDetailWidget"
+    ]
+  },
+  {
+    "name": "TodoDetailWidget",
+    "path": "src/widgets/todo-detail/ui/TodoDetailWidget.tsx",
+    "lines": 71,
+    "dependencies": [
+      "Modal",
+      "TodoFormContainer"
+    ]
+  },
+  {
+    "name": "TodoFilters",
+    "path": "src/features/filter-todo/ui/TodoFilter.tsx",
+    "lines": 25,
+    "dependencies": []
+  },
+  {
+    "name": "TodoForm",
+    "path": "src/features/add-todo/ui/TodoForm.tsx",
+    "lines": 61,
+    "dependencies": []
+  },
+  {
+    "name": "TodoFormContainer",
+    "path": "src/features/add-todo/ui/TodoFormContainer.tsx",
+    "lines": 29,
+    "dependencies": [
+      "TodoForm"
+    ]
+  },
+  {
+    "name": "TodoItem",
+    "path": "src/entities/todo/ui/TodoItem.tsx",
+    "lines": 40,
+    "dependencies": [
+      "Link",
+      "SwipeButton"
+    ]
+  },
+  {
+    "name": "TodoList",
+    "path": "src/widgets/todo-list/ui/TodoList.tsx",
+    "lines": 38,
+    "dependencies": [
+      "TodoItem"
+    ]
+  },
+  {
+    "name": "TodosPage",
+    "path": "src/pages/TodosPage/TodosPage.tsx",
+    "lines": 61,
+    "dependencies": [
+      "ClearAllButton",
+      "LogoutButton",
+      "Modal",
+      "TodoFilters",
+      "TodoFormContainer",
+      "TodoList",
+      "TodoStats",
+      "UserProfile"
+    ]
+  },
+  {
+    "name": "TodoState",
+    "path": "src/entities/todo/ui/TodoState.tsx",
+    "lines": 9,
+    "dependencies": []
+  },
+  {
+    "name": "TodoStats",
+    "path": "src/entities/todo/ui/TodoStats.tsx",
+    "lines": 11,
+    "dependencies": [
+      "TodoState"
+    ]
+  },
+  {
+    "name": "UserProfile",
+    "path": "src/features/logout/ui/UserProfile.tsx",
+    "lines": 16,
+    "dependencies": [
+      "Link",
+      "ThemeToggle"
+    ]
+  }
+]
