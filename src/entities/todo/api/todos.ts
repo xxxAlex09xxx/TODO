@@ -14,6 +14,28 @@ interface TodoFromServer {
     created_at: string;
 }
 
+export interface TodosPagination {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+}
+
+export interface TodoStatse {
+    total: number;
+    completed: number;
+    active: number;
+}
+
+interface TodoResponse {
+    todos: TodoFromServer[];
+    pagination: TodosPagination;
+    stats: TodoStatse;
+}
+
+export type TodoFilter = 'all' | 'active' | 'completed'
+
+
 // Преобразование: 0/1 → boolean
 const formatTodo = (todo: TodoFromServer) => ({
     ...todo,
@@ -21,17 +43,35 @@ const formatTodo = (todo: TodoFromServer) => ({
 });
 
 // GET /todos → { todos: [...] }
-export const fetchTodos = async () => {
-    const response = await apiFetch(API_URL);
+export const fetchTodos = async (params: {
+    page: number;
+    limit: number;
+    filter: TodoFilter;
+}): Promise<{
+    todos: Todo[];
+    pagination: TodosPagination;
+    stats: TodoStatse;
+}> => {
+    const searchParams = new URLSearchParams({
+        page: String(params.page),
+        limit: String(params.limit),
+        filter: params.filter,
+    });
+
+    const response = await apiFetch(`${API_URL}?${searchParams}`);
     if (!response.ok) {
         throw new Error(`Ошибка: ${response.status}`);
     }
-    const data: { todos: TodoFromServer[] } = await response.json();
-    return data.todos.map(formatTodo);
+    const data: TodoResponse = await response.json();
+    return {
+        todos: data.todos.map(formatTodo),
+        pagination: data.pagination,
+        stats: data.stats,
+    };
 };
 
 // POST /todos → { todo }
-export const createTodo = async (data: { title: string; description: string }):Promise<Todo> => {
+export const createTodo = async (data: { title: string; description: string }): Promise<Todo> => {
     const response = await apiFetch(API_URL, {
         method: 'POST',
         body: JSON.stringify(data),
@@ -47,7 +87,7 @@ export const createTodo = async (data: { title: string; description: string }):P
 export const updateTodo = async (
     id: number,
     patch: { completed?: boolean, title?: string; description?: string }
-):Promise<Todo> => {
+): Promise<Todo> => {
     const response = await apiFetch(`${API_URL}/${id}`, {
         method: 'PATCH',
         body: JSON.stringify(patch),
@@ -69,10 +109,10 @@ export const deleteTodoById = async (id: number): Promise<void> => {
     }
 };
 // DELETE /todos — удалить все задачи
-export const deleteTodoAll = async ():Promise<void>=>{
+export const deleteTodoAll = async (): Promise<void> => {
     const response = await apiFetch(API_URL, {
-        method:'DELETE'
- });
+        method: 'DELETE'
+    });
     if (!response.ok) {
         throw new Error(`Ошибка: ${response.status}`);
     }
@@ -80,14 +120,14 @@ export const deleteTodoAll = async ():Promise<void>=>{
 
 
 // GET /todo → { todo: Todo }
-export const fetchTodoById = async (id: number): Promise<Todo>=>{
+export const fetchTodoById = async (id: number): Promise<Todo> => {
     const response = await apiFetch(`${API_URL}/${id}`)
-    if(!response.ok){
-        if(response.status===404){
-            throw new Error ('Задача  не найдена')
+    if (!response.ok) {
+        if (response.status === 404) {
+            throw new Error('Задача  не найдена')
         }
-        throw new Error (`ошибка: ${response.status}`)
+        throw new Error(`ошибка: ${response.status}`)
     }
-    const data: {todo: TodoFromServer} = await response.json();
+    const data: { todo: TodoFromServer } = await response.json();
     return formatTodo(data.todo);
 }

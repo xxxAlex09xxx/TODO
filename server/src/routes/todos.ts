@@ -1,11 +1,10 @@
-// server/src/routes/todos.ts
+
 import { Router, Response } from 'express';
 import { db } from '../db';
 import { authMiddleware, AuthRequest } from '../middlewares/authMiddleware';
 
 export const todosRouter = Router();
 
-// Все роуты ниже защищены — только для залогиненных
 todosRouter.use(authMiddleware);
 
 interface Todo {
@@ -17,22 +16,83 @@ interface Todo {
     created_at: string;
 }
 
-// 📌 GET /todos — получить все свои задачи
+// GET /todos — получить задачи с пагинацией и фильтрацией
 todosRouter.get('/', (req: AuthRequest, res: Response) => {
-    db.all(
-        'SELECT * FROM todos WHERE user_id = ? ORDER BY created_at DESC',
-        [req.userId],
-        (err, rows) => {
+    const page = Math.max(1, parseInt(String(req.query.page), 10) || 1);
+    const limit = Math.min(50, Math.max(1, parseInt(String(req.query.limit), 10) || 5));
+    const filter = String(req.query.filter || 'all');
+
+    let where = 'WHERE user_id = ?';
+    const params = [req.userId];
+
+    if (filter === 'active') {
+        where += ' AND completed = 0';
+    } else if (filter === 'completed') {
+        where += ' AND completed = 1';
+    }
+
+    // Считаем количество задач с учётом фильтра
+    db.get(
+        `SELECT COUNT(*) AS total FROM todos ${where}`,
+        params,
+        (err, count: { total: number }) => {
             if (err) {
                 res.status(500).json({ error: err.message });
                 return;
             }
-            res.json({ todos: rows });
+
+            const total = count.total;
+            const totalPages = Math.ceil(total / limit);
+            const currentPage = Math.min(page, Math.max(totalPages, 1));
+            const offset = (currentPage - 1) * limit;
+
+            // Получаем только задачи текущей страницы
+            db.all(
+                `SELECT * FROM todos
+                 ${where}
+                 ORDER BY created_at DESC, id DESC
+                 LIMIT ? OFFSET ?`,
+                [...params, limit, offset],
+                (err, rows: Todo[]) => {
+                    if (err) {
+                        res.status(500).json({ error: err.message });
+                        return;
+                    }
+
+                    // Глобальная статистика — без учёта фильтра и страницы
+                    db.get(
+                        `SELECT
+                            COUNT(*) AS total,
+                            SUM(CASE WHEN completed = 1 THEN 1 ELSE 0 END) AS completed,
+                            SUM(CASE WHEN completed = 0 THEN 1 ELSE 0 END) AS active
+                         FROM todos
+                         WHERE user_id = ?`,
+                        [req.userId],
+                        (err, stats: { total: number; completed: number; active: number }) => {
+                            if (err) {
+                                res.status(500).json({ error: err.message });
+                                return;
+                            }
+
+                            res.json({
+                                todos: rows,
+                                pagination: {
+                                    page: currentPage,
+                                    limit,
+                                    total,
+                                    totalPages,
+                                },
+                                stats,
+                            });
+                        }
+                    );
+                }
+            );
         }
     );
 });
 
-// 📌 GET /todos/:id — получить одну задачу
+// GET /todos/:id — получить одну задачу
 todosRouter.get('/:id', (req: AuthRequest, res: Response) => {
     const todoId = Number(req.params.id);
 
@@ -58,7 +118,7 @@ todosRouter.get('/:id', (req: AuthRequest, res: Response) => {
     );
 });
 
-// 📌 POST /todos — создать задачу
+// POST /todos — создать задачу
 todosRouter.post('/', (req: AuthRequest, res: Response) => {
     const { title, description } = req.body;
 
@@ -94,7 +154,7 @@ todosRouter.post('/', (req: AuthRequest, res: Response) => {
     );
 });
 
-// 📌 PATCH /todos/:id — обновить задачу
+// PATCH /todos/:id — обновить задачу
 todosRouter.patch('/:id', (req: AuthRequest, res: Response) => {
     const todoId = Number(req.params.id);
     const { title, description, completed } = req.body;
@@ -148,7 +208,7 @@ todosRouter.patch('/:id', (req: AuthRequest, res: Response) => {
     );
 });
 
-// 👇 НОВЫЙ РОУТ: DELETE /todos — удалить ВСЕ задачи (должен быть до /:id)
+// DELETE /todos — удалить все задачи пользователя
 todosRouter.delete('/', (req: AuthRequest, res: Response) => {
     db.run(
         'DELETE FROM todos WHERE user_id = ?',
@@ -163,7 +223,7 @@ todosRouter.delete('/', (req: AuthRequest, res: Response) => {
     );
 });
 
-// 📌 DELETE /todos/:id — удалить одну задачу
+// DELETE /todos/:id — удалить одну задачу
 todosRouter.delete('/:id', (req: AuthRequest, res: Response) => {
     const todoId = Number(req.params.id);
 

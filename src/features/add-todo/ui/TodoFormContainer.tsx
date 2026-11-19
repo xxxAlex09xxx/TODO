@@ -5,8 +5,8 @@ import { TodoForm } from './TodoForm';
 
 interface TodoFormContainerProps {
     mode: 'create' | 'edit';
-    todoId?: number; // нужен только для edit
-    initialValues?: { title: string; description: string }; // нужен только для edit
+    todoId?: number; 
+    initialValues?: { title: string; description: string }; 
     onSuccess: () => void;
     onCancel: () => void;
 }
@@ -20,7 +20,7 @@ export const TodoFormContainer = ({
 }: TodoFormContainerProps) => {
     // 👇 Всегда вызываем оба хука (React требует безусловный вызов)
     const { addTodo } = useTodos();
-    const { updateTodo } = useTodo(mode === 'edit' && todoId ? todoId : 0);
+    const { updateTodo } = useTodo( mode === 'edit' ? todoId : undefined);
 
     const handleSubmit = ({ title, description }: { title: string; description: string }) => {
         if (mode === 'create') {

@@ -1,4 +1,4 @@
-// app/hooks/useTodos.ts
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
     fetchTodos,
@@ -6,29 +6,40 @@ import {
     updateTodo,
     deleteTodoById,
     deleteTodoAll,
+    type TodoFilter,
+    type TodoStatse,
 } from '../api/todos';
 
-interface TodoStats {
-    total: number;
-    completed: number;
-    active: number;
-}
-
-// Ключ для кэша React Query
 const TODOS_KEY = ['todos'];
+const PAGE_SIZE = 9;
 
-export const useTodos = () => {
+export const useTodos = (page?: number, filter?: TodoFilter) => {
     const queryClient = useQueryClient();
 
-    // 📥 Загрузка задач
+    // Загрузка только нужной страницы с выбранным фильтром
     const {
-        data: todos = [],
+        data,
         isLoading: loading,
         error: queryError,
     } = useQuery({
-        queryKey: TODOS_KEY,
-        queryFn: fetchTodos,
+        queryKey: [...TODOS_KEY, page, filter],
+        queryFn: () => fetchTodos({
+            page: page ?? 1,
+        limit: PAGE_SIZE,
+        filter: filter ?? 'all',
+        }),
+        enabled: page !== undefined && filter !== undefined,
     });
+
+    const todos = data?.todos ?? [];
+    const pagination = data?.pagination;
+
+    // Статистика приходит с сервера и учитывает все задачи
+    const stats: TodoStatse = {
+        total: data?.stats.total ?? 0,
+        completed: data?.stats.completed ?? 0,
+        active: data?.stats.active ?? 0,
+    };
 
     // ➕ Добавление
     const addMutation = useMutation({
@@ -39,7 +50,7 @@ export const useTodos = () => {
         },
     });
 
-    // 🔄 Переключение
+    // 🔄 Переключение статуса
     const toggleMutation = useMutation({
         mutationFn: ({ id, completed }: { id: number; completed: boolean }) =>
             updateTodo(id, { completed }),
@@ -48,7 +59,7 @@ export const useTodos = () => {
         },
     });
 
-    // 🗑️ Удаление
+    // 🗑️ Удаление одной задачи
     const deleteMutation = useMutation({
         mutationFn: deleteTodoById,
         onSuccess: () => {
@@ -56,46 +67,47 @@ export const useTodos = () => {
         },
     });
 
-    // 🗑️ Удаление ВСЕ
-    const deleteAllMutation  = useMutation({
+    // 🗑️ Удаление всех задач
+    const deleteAllMutation = useMutation({
         mutationFn: deleteTodoAll,
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: TODOS_KEY });
         },
     });
 
-    // 📊 Статистика
-    const stats: TodoStats = {
-        total: todos.length,
-        completed: todos.filter(t => t.completed).length,
-        active: todos.filter(t => !t.completed).length,
-    };
-
-    // Ошибка — из любого места
+    // Общая ошибка
     const error =
         queryError?.message ??
         addMutation.error?.message ??
         toggleMutation.error?.message ??
         deleteMutation.error?.message ??
+        deleteAllMutation.error?.message ??
         null;
+        console.log(stats)
 
     return {
         todos,
         loading,
         error,
         stats,
+        pagination,
 
-        addTodo: (title: string, description: string) => addMutation.mutate({ title, description }),
+        addTodo: (title: string, description: string) =>
+            addMutation.mutate({ title, description }),
 
         toggleTodo: (id: number) => {
             const todo = todos.find(t => t.id === id);
             if (!todo) return;
-            toggleMutation.mutate({ id, completed: !todo.completed });
+
+            toggleMutation.mutate({
+                id,
+                completed: !todo.completed,
+            });
         },
 
         deleteTodo: (id: number) => deleteMutation.mutate(id),
 
-        deleteAllTodos:() => deleteAllMutation.mutate(),
+        deleteAllTodos: () => deleteAllMutation.mutate(),
 
         fetchTodos: () =>
             queryClient.invalidateQueries({ queryKey: TODOS_KEY }),
