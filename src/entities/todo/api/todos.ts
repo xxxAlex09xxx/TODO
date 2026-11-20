@@ -131,3 +131,4 @@ export const fetchTodoById = async (id: number): Promise<Todo> => {
     const data: { todo: TodoFromServer } = await response.json();
     return formatTodo(data.todo);
 }
+

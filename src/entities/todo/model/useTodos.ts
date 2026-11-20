@@ -1,4 +1,3 @@
-
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
     fetchTodos,
@@ -34,7 +33,6 @@ export const useTodos = (page?: number, filter?: TodoFilter) => {
     const todos = data?.todos ?? [];
     const pagination = data?.pagination;
 
-    // Статистика приходит с сервера и учитывает все задачи
     const stats: TodoStatse = {
         total: data?.stats.total ?? 0,
         completed: data?.stats.completed ?? 0,

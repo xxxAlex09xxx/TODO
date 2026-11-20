@@ -56,26 +56,42 @@ export const TodoList = () => {
             </ul>
 
             {pagination && pagination.totalPages > 1 && (
-                <div className={style.pagination}>
-                    <button
-                        onClick={() => handlePageChange(pagination.page - 1)}
-                        disabled={pagination.page === 1}
-                    >
-                        Назад
-                    </button>
+    <div className={style.pagination}>
+        <button
+            onClick={() => handlePageChange(pagination.page - 1)}
+            disabled={pagination.page === 1}
+        >
+            Назад
+        </button>
 
-                    <span>
-                        Страница {pagination.page} из {pagination.totalPages}
-                    </span>
+        {/* 👇 ВОТ ЭТОТ БЛОК ВЫВОДИТ НОМЕРА */}
+        {Array.from({ length: 7 }, (_, i) => {
+            // Вычисляем, какую страницу показывать (смещаем окно вокруг текущей)
+            const pageNumber = pagination.page - 2 + i;
+            
+            // Скрываем номера, которые выходят за пределы (меньше 1 или больше максимума)
+            if (pageNumber < 1 || pageNumber > pagination.totalPages) return null;
 
-                    <button
-                        onClick={() => handlePageChange(pagination.page + 1)}
-                        disabled={pagination.page === pagination.totalPages}
-                    >
-                        Далее
-                    </button>
-                </div>
-            )}
+            return (
+                <button
+                    key={pageNumber}
+                    onClick={() => handlePageChange(pageNumber)}
+                    disabled={pagination.page === pageNumber}
+                    style={{ fontWeight: pagination.page === pageNumber ? 'bold' : 'normal' }}
+                >
+                    {pageNumber}
+                </button>
+            );
+        })}
+
+        <button
+            onClick={() => handlePageChange(pagination.page + 1)}
+            disabled={pagination.page === pagination.totalPages}
+        >
+            Далее
+        </button>
+    </div>
+)}
         </div>
     );
 };

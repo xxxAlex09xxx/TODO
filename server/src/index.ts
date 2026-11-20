@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import  './db';
 import { authRouter } from './routes/auth';
 import { todosRouter } from './routes/todos';
+import { usersRouter } from './routes/users';
 const app = express();
 const PORT = config.port;
 
@@ -41,6 +42,7 @@ app.use(cookieParser());   // ← для чтения cookies
 
 app.use('/auth', authRouter);
 app.use('/todos', todosRouter);
+app.use('/admin/users', usersRouter); // 👈 Подключаем новый роутер по пути /admin/users
 
 app.use((req: Request, res: Response) => {
     res.status(404).json({ error: 'Route not found' });

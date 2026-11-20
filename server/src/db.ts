@@ -67,15 +67,11 @@ function createTables(): void {
     });
 
     // ⚠️ Миграция для старых БД — добавит description, если её ещё нет.
-    // Если колонка уже есть — будет ошибка "duplicate column", её глотаем.
     db.run(`ALTER TABLE todos ADD COLUMN description TEXT NOT NULL DEFAULT ''`, (err) => {
         if (err && !err.message.includes('duplicate column')) {
             console.error('❌ Миграция description не удалась:', err.message);
         }
     });
-    // server/src/db.ts
-
-// ... (предыдущий код с миграцией description) ...
 
     // ⚠️ Миграции для таблицы users (для сброса пароля)
     db.run(`ALTER TABLE users ADD COLUMN reset_token TEXT`, (err) => {
@@ -90,7 +86,7 @@ function createTables(): void {
         }
     });
 
-        // ⚠️ Миграция для таблицы users (добавляем роль)
+    // ⚠️ Миграция для таблицы users (добавляем роль)
     db.run(`ALTER TABLE users ADD COLUMN role TEXT DEFAULT 'user'`, (err) => {
         if (err && !err.message.includes('duplicate column')) {
             console.error('❌ Миграция role не удалась:', err.message);
@@ -99,4 +95,22 @@ function createTables(): void {
         }
     });
 
+    // 👇 НОВЫЕ МИГРАЦИИ ДЛЯ АДМИНКИ
+    // Добавляем имя (по умолчанию будет 'Пользователь', если не задано)
+    db.run(`ALTER TABLE users ADD COLUMN name TEXT DEFAULT 'Пользователь'`, (err) => {
+        if (err && !err.message.includes('duplicate column')) {
+            console.error('❌ Миграция name не удалась:', err.message);
+        } else {
+            console.log('✅ Колонка name готова (или уже была)');
+        }
+    });
+
+    // Добавляем статус (по умолчанию 'active')
+    db.run(`ALTER TABLE users ADD COLUMN status TEXT DEFAULT 'active'`, (err) => {
+        if (err && !err.message.includes('duplicate column')) {
+            console.error('❌ Миграция status не удалась:', err.message);
+        } else {
+            console.log('✅ Колонка status готова (или уже была)');
+        }
+    });
 }

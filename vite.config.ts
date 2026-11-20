@@ -1,15 +1,15 @@
-// vite.config.ts
-/// <reference types="vitest" />   // 👈 Важно: три слэша!
-import { defineConfig } from 'vitest/config'; // 👈 Импорт из vitest/config
+
+/// <reference types="vitest" />
+import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
-  
+
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(import.meta.dirname, './src'),
     },
   },
 
@@ -19,7 +19,7 @@ export default defineConfig({
   },
 
   build: {
-    outDir: 'dist'
+    outDir: 'dist',
   },
 
   test: {
